@@ -1,50 +1,8 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
 // ============================================
-// Interfaces
+// Portfolio Interfaces
 // ============================================
-
-export interface User {
-  id: number
-  email: string
-  created_at: string
-}
-
-export interface Release {
-  id: number
-  title: string
-  version: string
-  slug: string | null
-  content_md: string
-  visibility: 'draft' | 'published'
-  published_at: string | null
-  created_at: string
-  updated_at: string
-  user_id: number
-}
-
-export interface ReleasePublic {
-  id: number
-  title: string
-  version: string
-  slug: string | null
-  content_md: string
-  published_at: string | null
-}
-
-export interface CreateReleaseData {
-  title: string
-  version: string
-  content_md?: string
-  visibility?: 'draft' | 'published'
-}
-
-export interface UpdateReleaseData {
-  title?: string
-  version?: string
-  content_md?: string
-  visibility?: 'draft' | 'published'
-}
 
 export interface Testimonial {
   id: number
@@ -141,128 +99,6 @@ const FALLBACK_STATS: PortfolioStats = {
 }
 
 // ============================================
-// API Client
-// ============================================
-
-class ApiClient {
-  private getToken(): string | null {
-    if (typeof window === 'undefined') return null
-    return localStorage.getItem('token')
-  }
-
-  private async request<T>(
-    endpoint: string,
-    options: RequestInit = {}
-  ): Promise<T> {
-    const token = this.getToken()
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-      ...(options.headers as Record<string, string>),
-    }
-
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`
-    }
-
-    const response = await fetch(`${API_URL}${endpoint}`, {
-      ...options,
-      headers,
-    })
-
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({ detail: 'An error occurred' }))
-      throw new Error(error.detail || 'An error occurred')
-    }
-
-    if (response.status === 204) {
-      return null as T
-    }
-
-    return response.json()
-  }
-
-  // Auth
-  async register(email: string, password: string): Promise<User> {
-    return this.request('/auth/register', {
-      method: 'POST',
-      body: JSON.stringify({ email, password }),
-    })
-  }
-
-  async login(email: string, password: string): Promise<{ access_token: string }> {
-    const response = await this.request<{ access_token: string }>('/auth/login', {
-      method: 'POST',
-      body: JSON.stringify({ email, password }),
-    })
-    if (response.access_token) {
-      localStorage.setItem('token', response.access_token)
-    }
-    return response
-  }
-
-  async getMe(): Promise<User> {
-    return this.request('/auth/me')
-  }
-
-  logout(): void {
-    localStorage.removeItem('token')
-  }
-
-  // Releases (protected)
-  async getReleases(status?: 'draft' | 'published'): Promise<Release[]> {
-    const params = status ? `?status=${status}` : ''
-    return this.request(`/releases${params}`)
-  }
-
-  async getRelease(id: number): Promise<Release> {
-    return this.request(`/releases/${id}`)
-  }
-
-  async createRelease(data: CreateReleaseData): Promise<Release> {
-    return this.request('/releases', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    })
-  }
-
-  async updateRelease(id: number, data: UpdateReleaseData): Promise<Release> {
-    return this.request(`/releases/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify(data),
-    })
-  }
-
-  async deleteRelease(id: number): Promise<void> {
-    return this.request(`/releases/${id}`, {
-      method: 'DELETE',
-    })
-  }
-
-  async publishRelease(id: number): Promise<Release> {
-    return this.request(`/releases/${id}/publish`, {
-      method: 'POST',
-    })
-  }
-
-  async unpublishRelease(id: number): Promise<Release> {
-    return this.request(`/releases/${id}/unpublish`, {
-      method: 'POST',
-    })
-  }
-
-  // Public
-  async getPublicReleases(): Promise<ReleasePublic[]> {
-    return this.request('/public/releases')
-  }
-
-  async getPublicRelease(slug: string): Promise<ReleasePublic> {
-    return this.request(`/public/releases/${slug}`)
-  }
-}
-
-export const api = new ApiClient()
-
-// ============================================
 // Portfolio API with Demo Mode Fallback
 // ============================================
 
@@ -338,7 +174,7 @@ export const portfolioApi = {
     }, fallback)
   },
 
-  // Track a view (just return mock data in demo mode)
+  // Track a view
   async trackView(sessionId?: string): Promise<ViewStats> {
     const fallback = {
       total_views: 42,
