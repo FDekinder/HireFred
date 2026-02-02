@@ -1,8 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ArrowRight, Download, Coffee, Sparkles } from 'lucide-react'
-import { AnimatedIllustration } from './AnimatedIllustration'
+import { ArrowRight, Download, Coffee, Sparkles, Code2, Zap, Heart } from 'lucide-react'
 
 export function VibrantHero() {
   return (
@@ -98,14 +97,56 @@ export function VibrantHero() {
             </motion.div>
           </div>
 
-          {/* Right side - Animated Illustration */}
+          {/* Right side - Animated Icons */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.5 }}
-            className="relative lg:pl-8"
+            className="relative lg:pl-8 flex items-center justify-center"
           >
-            <AnimatedIllustration />
+            <div className="relative w-80 h-80">
+              {/* Central icon */}
+              <motion.div
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-black rounded-3xl flex items-center justify-center"
+                animate={{ rotate: [0, 5, -5, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+              >
+                <Code2 className="w-16 h-16 text-sunny-yellow" />
+              </motion.div>
+
+              {/* Orbiting icons */}
+              <motion.div
+                className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-16 bg-hot-pink rounded-2xl flex items-center justify-center"
+                animate={{ y: [0, -10, 0] }}
+                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+              >
+                <Zap className="w-8 h-8 text-white" />
+              </motion.div>
+
+              <motion.div
+                className="absolute bottom-0 left-1/2 -translate-x-1/2 w-16 h-16 bg-black rounded-2xl flex items-center justify-center"
+                animate={{ y: [0, 10, 0] }}
+                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
+              >
+                <Heart className="w-8 h-8 text-hot-pink" />
+              </motion.div>
+
+              <motion.div
+                className="absolute top-1/2 left-0 -translate-y-1/2 w-16 h-16 bg-hot-pink/20 border-2 border-hot-pink rounded-2xl flex items-center justify-center"
+                animate={{ x: [0, -10, 0] }}
+                transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+              >
+                <Coffee className="w-8 h-8 text-black" />
+              </motion.div>
+
+              <motion.div
+                className="absolute top-1/2 right-0 -translate-y-1/2 w-16 h-16 bg-black/10 border-2 border-black rounded-2xl flex items-center justify-center"
+                animate={{ x: [0, 10, 0] }}
+                transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
+              >
+                <Sparkles className="w-8 h-8 text-hot-pink" />
+              </motion.div>
+            </div>
           </motion.div>
         </div>
       </div>
