@@ -3,6 +3,10 @@ from pydantic import BaseModel, EmailStr
 from typing import Optional
 from datetime import datetime
 import random
+import smtplib
+import os
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 router = APIRouter(prefix="/api/portfolio", tags=["portfolio"])
 
@@ -171,6 +175,50 @@ def get_views():
     }
 
 
+def send_contact_email(contact: dict) -> bool:
+    """Send email notification for new contact form submission"""
+    try:
+        smtp_user = os.environ.get("SMTP_USER")
+        smtp_pass = os.environ.get("SMTP_PASS")
+        recipient_email = "frederick.de.kinder@gmail.com"
+
+        if not smtp_user or not smtp_pass:
+            print("SMTP credentials not configured, skipping email")
+            return False
+
+        msg = MIMEMultipart()
+        msg["From"] = smtp_user
+        msg["To"] = recipient_email
+        msg["Subject"] = f"New Contact from {contact['name']} - HireFred Portfolio"
+
+        body = f"""
+New contact form submission from your portfolio site!
+
+From: {contact['name']}
+Email: {contact['email']}
+Company: {contact.get('company', 'Not provided')}
+
+Message:
+{contact['message']}
+
+---
+Submitted at: {contact['submitted_at']}
+Reference ID: {contact['id']}
+        """
+
+        msg.attach(MIMEText(body, "plain"))
+
+        with smtplib.SMTP("smtp.gmail.com", 587) as server:
+            server.starttls()
+            server.login(smtp_user, smtp_pass)
+            server.send_message(msg)
+
+        return True
+    except Exception as e:
+        print(f"Failed to send email: {e}")
+        return False
+
+
 @router.post("/contact")
 def submit_contact(message: ContactMessage):
     """Submit a contact message - shows form handling"""
@@ -185,9 +233,12 @@ def submit_contact(message: ContactMessage):
     }
     contact_messages.append(contact_entry)
 
+    # Send email notification
+    email_sent = send_contact_email(contact_entry)
+
     return {
         "success": True,
-        "message": f"Thanks {message.name}! I'll get back to you soon! 🚀",
+        "message": f"Thanks {message.name}! I'll get back to you soon!",
         "reference_id": contact_entry["id"]
     }
 
