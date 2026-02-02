@@ -1,7 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "Bash(.venvScriptspython.exe -m pip list)"
+      "Bash(.venvScriptspython.exe -m pip list)",
+      "WebFetch(domain:hire-fred.vercel.app)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push)"
     ]
   }
 }
