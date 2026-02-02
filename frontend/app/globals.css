@@ -1,0 +1,262 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --lime: #CDFF00;
+  --hot-pink: #FF00FF;
+  --electric-blue: #00FFFF;
+  --sunny-yellow: #FFFF00;
+  --vibrant-green: #00FF66;
+  --orange: #FF6B00;
+  --purple: #8B5CF6;
+}
+
+* {
+  cursor: default;
+}
+
+a, button {
+  cursor: pointer;
+}
+
+body {
+  background: #000;
+  color: #fff;
+  overflow-x: hidden;
+}
+
+/* Vibrant selection */
+::selection {
+  background: var(--hot-pink);
+  color: #000;
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Bold gradient text */
+.gradient-text-vibrant {
+  background: linear-gradient(90deg, var(--lime), var(--electric-blue), var(--hot-pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text {
+  background: linear-gradient(90deg, var(--lime), var(--electric-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Animated gradient background */
+.animated-gradient {
+  background: linear-gradient(-45deg, #000, #1a1a2e, #16213e, #0f0f23);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Neon glow effect */
+.neon-glow {
+  text-shadow:
+    0 0 10px var(--lime),
+    0 0 20px var(--lime),
+    0 0 40px var(--lime);
+}
+
+.neon-glow-pink {
+  text-shadow:
+    0 0 10px var(--hot-pink),
+    0 0 20px var(--hot-pink),
+    0 0 40px var(--hot-pink);
+}
+
+/* Glass card styles */
+.glass-card {
+  @apply bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl;
+}
+
+.glass-card-hover {
+  @apply glass-card transition-all duration-300 hover:bg-white/10 hover:border-white/20 hover:-translate-y-1;
+}
+
+/* Grid background */
+.grid-bg {
+  background-size: 50px 50px;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+
+/* Vibrant card styles */
+.card-lime {
+  background: var(--lime);
+  color: #000;
+}
+
+.card-pink {
+  background: var(--hot-pink);
+  color: #fff;
+}
+
+.card-blue {
+  background: var(--electric-blue);
+  color: #000;
+}
+
+.card-yellow {
+  background: var(--sunny-yellow);
+  color: #000;
+}
+
+.card-green {
+  background: var(--vibrant-green);
+  color: #000;
+}
+
+/* Marquee animation */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 20s linear infinite;
+}
+
+/* Bounce animation */
+@keyframes bounce-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+.animate-bounce-slow {
+  animation: bounce-slow 3s ease-in-out infinite;
+}
+
+/* Rotate animation */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}
+
+/* Blob animation */
+@keyframes blob {
+  0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+  50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+}
+
+.animate-blob {
+  animation: blob 8s ease-in-out infinite;
+}
+
+/* Skeleton animation */
+.skeleton {
+  @apply animate-pulse bg-white/10 rounded;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--lime);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--hot-pink);
+}
+
+/* Markdown editor dark theme overrides */
+.w-md-editor {
+  --color-canvas-default: rgba(255, 255, 255, 0.05) !important;
+  --color-canvas-subtle: rgba(255, 255, 255, 0.03) !important;
+  --color-border-default: rgba(255, 255, 255, 0.1) !important;
+  --color-border-muted: rgba(255, 255, 255, 0.05) !important;
+  --color-fg-default: #fafafa !important;
+  --color-fg-muted: rgba(255, 255, 255, 0.6) !important;
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.w-md-editor-toolbar {
+  background-color: rgba(255, 255, 255, 0.03) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.w-md-editor-preview {
+  background-color: transparent !important;
+}
+
+.wmde-markdown {
+  background-color: transparent !important;
+  color: #fafafa !important;
+}
+
+.wmde-markdown code {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.wmde-markdown pre {
+  background-color: rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Page transition */
+.page-transition {
+  animation: pageIn 0.5s ease-out;
+}
+
+@keyframes pageIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Stagger children animation */
+.stagger-children > * {
+  opacity: 0;
+  animation: staggerIn 0.5s ease-out forwards;
+}
+
+.stagger-children > *:nth-child(1) { animation-delay: 0.1s; }
+.stagger-children > *:nth-child(2) { animation-delay: 0.2s; }
+.stagger-children > *:nth-child(3) { animation-delay: 0.3s; }
+.stagger-children > *:nth-child(4) { animation-delay: 0.4s; }
+.stagger-children > *:nth-child(5) { animation-delay: 0.5s; }
+
+@keyframes staggerIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
