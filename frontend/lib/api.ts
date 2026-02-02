@@ -104,7 +104,7 @@ export interface ContactResponse {
 // ============================================
 // DEMO MODE - Fallback data when backend is unavailable
 // ============================================
-const DEMO_MODE = true // Set to false when backend is working
+const DEMO_MODE = false // Set to false when backend is working
 
 const FALLBACK_TESTIMONIALS: Testimonial[] = [
   { id: 1, quote: "Frederick's WebSocket implementation handled 1,000+ daily sessions flawlessly. Zero data loss.", author: "Tech Lead", company: "Bell Canada", role: "Real-Time Collaboration Project" },
