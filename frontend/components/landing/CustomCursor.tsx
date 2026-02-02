@@ -8,6 +8,7 @@ export function CustomCursor() {
   const [angle, setAngle] = useState(0)
   const [isHoveringName, setIsHoveringName] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
+  const [isOnDark, setIsOnDark] = useState(false)
   const nameRef = useRef<DOMRect | null>(null)
 
   useEffect(() => {
@@ -49,6 +50,32 @@ export function CustomCursor() {
           e.clientY >= rect.top &&
           e.clientY <= rect.bottom
         setIsHoveringName(isHovering)
+      }
+
+      // Check if cursor is over a dark background
+      const elementUnder = document.elementFromPoint(e.clientX, e.clientY)
+      if (elementUnder) {
+        const bgColor = window.getComputedStyle(elementUnder).backgroundColor
+        // Check if element or its parents have dark background
+        let isDark = false
+        let el: Element | null = elementUnder
+        while (el && !isDark) {
+          const bg = window.getComputedStyle(el).backgroundColor
+          // Parse rgb/rgba values
+          const match = bg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/)
+          if (match) {
+            const r = parseInt(match[1])
+            const g = parseInt(match[2])
+            const b = parseInt(match[3])
+            // If brightness is low, it's dark
+            const brightness = (r * 299 + g * 587 + b * 114) / 1000
+            if (brightness < 128 && bg !== 'rgba(0, 0, 0, 0)') {
+              isDark = true
+            }
+          }
+          el = el.parentElement
+        }
+        setIsOnDark(isDark)
       }
     }
 
@@ -114,7 +141,7 @@ export function CustomCursor() {
                 {/* Arrow pointing right (will be rotated) */}
                 <path
                   d="M8 16H24M24 16L18 10M24 16L18 22"
-                  stroke="black"
+                  stroke={isOnDark ? "#FF69B4" : "black"}
                   strokeWidth="3"
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -123,7 +150,7 @@ export function CustomCursor() {
             </motion.div>
 
             {/* Small dot at cursor position */}
-            <div className="absolute w-2 h-2 bg-black rounded-full -translate-x-1/2 -translate-y-1/2" />
+            <div className={`absolute w-2 h-2 rounded-full -translate-x-1/2 -translate-y-1/2 ${isOnDark ? 'bg-hot-pink' : 'bg-black'}`} />
 
             {/* HIRE ME tooltip when hovering name - clickable! */}
             <AnimatePresence>
