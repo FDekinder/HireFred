@@ -311,7 +311,7 @@ export const portfolioApi = {
       : FALLBACK_SKILLS
     const fallback = {
       skills: filteredSkills,
-      categories: [...new Set(FALLBACK_SKILLS.map(s => s.category))],
+      categories: Array.from(new Set(FALLBACK_SKILLS.map(s => s.category))),
       average_proficiency: filteredSkills.reduce((sum, s) => sum + s.level, 0) / filteredSkills.length
     }
     return tryFetchOrFallback(async () => {
@@ -329,7 +329,7 @@ export const portfolioApi = {
     const fallback = {
       projects: FALLBACK_PROJECTS,
       total: FALLBACK_PROJECTS.length,
-      tech_used: [...new Set(FALLBACK_PROJECTS.flatMap(p => p.tech))]
+      tech_used: Array.from(new Set(FALLBACK_PROJECTS.flatMap(p => p.tech)))
     }
     return tryFetchOrFallback(async () => {
       const res = await fetch(`${API_URL}/api/portfolio/projects`)
