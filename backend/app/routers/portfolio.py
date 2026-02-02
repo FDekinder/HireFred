@@ -239,7 +239,8 @@ def submit_contact(message: ContactMessage):
     return {
         "success": True,
         "message": f"Thanks {message.name}! I'll get back to you soon!",
-        "reference_id": contact_entry["id"]
+        "reference_id": contact_entry["id"],
+        "email_sent": email_sent
     }
 
 
