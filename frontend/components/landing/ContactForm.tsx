@@ -53,6 +53,9 @@ export function ContactForm() {
           <p className="text-black/60">
             This form posts to the FastAPI backend. Try it out!
           </p>
+          <p className="text-black/40 text-sm mt-2 italic">
+            Note: I won't receive this message - it's just to show you my API works ;) Email me or call me to reach me!
+          </p>
         </motion.div>
 
         <motion.div
