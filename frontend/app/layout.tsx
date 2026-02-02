@@ -7,8 +7,8 @@ import { Toaster } from 'react-hot-toast'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'ReleaseNoteHub - Beautiful Release Notes & Changelogs',
-  description: 'Create stunning, animated release notes and changelogs for your products. Keep your users informed with style.',
+  title: 'Frederick De Kinder - Full-Stack Developer',
+  description: 'Full-Stack Developer with 3+ years experience in Vue.js, TypeScript, Python & FastAPI. Available for opportunities in Montreal.',
 }
 
 export default function RootLayout({
