@@ -40,7 +40,7 @@ export function VibrantNavbar() {
           >
             <Heart className="w-6 h-6 text-white" />
           </motion.div>
-          <span className="text-2xl font-black tracking-tight relative">
+          <span id="frederick-name" className="text-2xl font-black tracking-tight relative">
             <span className="text-white group-hover:opacity-0 transition-opacity">Frederick</span>
             <span className="text-sunny-yellow text-4xl absolute inset-0 flex items-center opacity-0 group-hover:opacity-100 transition-opacity">☺</span>
           </span>

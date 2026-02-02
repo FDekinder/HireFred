@@ -11,10 +11,12 @@ import { ContactForm } from '@/components/landing/ContactForm'
 import { VibrantCTA } from '@/components/landing/VibrantCTA'
 import { VibrantFooter } from '@/components/landing/VibrantFooter'
 import { ViewCounter } from '@/components/landing/ViewCounter'
+import { CustomCursor } from '@/components/landing/CustomCursor'
 
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-sunny-yellow text-black overflow-x-hidden">
+      <CustomCursor />
       <VibrantNavbar />
       <VibrantHero />
       <Marquee />
