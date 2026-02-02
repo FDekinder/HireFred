@@ -13,6 +13,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-COPY start.sh .
-RUN sed -i 's/\r$//' start.sh && chmod +x start.sh
-CMD ["./start.sh"]
+CMD /bin/sh -c "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8080}"
