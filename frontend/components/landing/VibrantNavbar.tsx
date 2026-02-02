@@ -32,19 +32,21 @@ export function VibrantNavbar() {
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-3 group">
-          <motion.div
-            className="w-12 h-12 rounded-2xl bg-hot-pink flex items-center justify-center"
-            whileHover={{ scale: 1.1, rotate: 5 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Heart className="w-6 h-6 text-white" />
-          </motion.div>
-          <span id="frederick-name" className="text-2xl font-black tracking-tight relative">
+        <div className="flex items-center gap-3">
+          <Link href="/">
+            <motion.div
+              className="w-12 h-12 rounded-2xl bg-hot-pink flex items-center justify-center"
+              whileHover={{ scale: 1.1, rotate: 5 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Heart className="w-6 h-6 text-white" />
+            </motion.div>
+          </Link>
+          <a href="mailto:frederick.de.kinder@gmail.com" id="frederick-name" className="text-2xl font-black tracking-tight relative group">
             <span className="text-white group-hover:opacity-0 transition-opacity">Frederick</span>
             <span className="text-sunny-yellow text-4xl absolute inset-0 flex items-center opacity-0 group-hover:opacity-100 transition-opacity">☺</span>
-          </span>
-        </Link>
+          </a>
+        </div>
 
         {/* Nav links */}
         <div className="hidden md:flex items-center gap-1">
