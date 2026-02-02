@@ -125,17 +125,18 @@ export function CustomCursor() {
             {/* Small dot at cursor position */}
             <div className="absolute w-2 h-2 bg-black rounded-full -translate-x-1/2 -translate-y-1/2" />
 
-            {/* HIRE ME tooltip when hovering name */}
+            {/* HIRE ME tooltip when hovering name - clickable! */}
             <AnimatePresence>
               {isHoveringName && (
-                <motion.div
+                <motion.a
+                  href="mailto:frederick.de.kinder@gmail.com"
                   initial={{ opacity: 0, scale: 0.5, y: 10 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.5, y: 10 }}
-                  className="absolute left-4 top-4 bg-hot-pink text-white px-4 py-2 rounded-full font-black text-sm whitespace-nowrap shadow-lg"
+                  className="absolute left-4 top-4 bg-hot-pink text-white px-4 py-2 rounded-full font-black text-sm whitespace-nowrap shadow-lg pointer-events-auto hover:bg-black hover:scale-110 transition-all"
                 >
                   HIRE ME!
-                </motion.div>
+                </motion.a>
               )}
             </AnimatePresence>
           </motion.div>
