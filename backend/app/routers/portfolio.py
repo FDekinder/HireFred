@@ -175,7 +175,7 @@ def get_views():
     }
 
 
-def send_contact_email(contact: dict) -> bool:
+def send_contact_email(contact: dict) -> dict:
     """Send email notification for new contact form submission"""
     try:
         smtp_user = os.environ.get("SMTP_USER")
@@ -183,8 +183,7 @@ def send_contact_email(contact: dict) -> bool:
         recipient_email = "frederick.de.kinder@gmail.com"
 
         if not smtp_user or not smtp_pass:
-            print("SMTP credentials not configured, skipping email")
-            return False
+            return {"sent": False, "error": f"Missing credentials: user={bool(smtp_user)}, pass={bool(smtp_pass)}"}
 
         msg = MIMEMultipart()
         msg["From"] = smtp_user
@@ -213,10 +212,9 @@ Reference ID: {contact['id']}
             server.login(smtp_user, smtp_pass)
             server.send_message(msg)
 
-        return True
+        return {"sent": True, "error": None}
     except Exception as e:
-        print(f"Failed to send email: {e}")
-        return False
+        return {"sent": False, "error": str(e)}
 
 
 @router.post("/contact")
@@ -234,13 +232,13 @@ def submit_contact(message: ContactMessage):
     contact_messages.append(contact_entry)
 
     # Send email notification
-    email_sent = send_contact_email(contact_entry)
+    email_result = send_contact_email(contact_entry)
 
     return {
         "success": True,
         "message": f"Thanks {message.name}! I'll get back to you soon!",
         "reference_id": contact_entry["id"],
-        "email_sent": email_sent
+        "email_debug": email_result
     }
 
 
