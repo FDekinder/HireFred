@@ -64,7 +64,7 @@ export function PasswordGate({ onUnlock }: PasswordGateProps) {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="type the password..."
               autoFocus
-              className="w-full px-6 py-4 text-lg rounded-2xl border-4 border-black/20 focus:border-hot-pink focus:outline-none transition-colors bg-white text-center font-bold placeholder:font-normal placeholder:text-black/30"
+              className="w-full px-6 py-4 text-lg rounded-2xl border-4 border-black/20 focus:border-hot-pink focus:outline-none transition-colors bg-white text-black text-center font-bold placeholder:font-normal placeholder:text-black/30"
             />
           </motion.div>
 
