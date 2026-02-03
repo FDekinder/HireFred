@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Heart, Linkedin, Mail } from 'lucide-react'
 
-export function VibrantFooter() {
+export function VibrantFooter({ company }: { company: string }) {
   return (
     <footer className="py-12 px-6 border-t-4 border-black">
       <div className="max-w-7xl mx-auto">
@@ -56,7 +56,7 @@ export function VibrantFooter() {
               </motion.a>
             </div>
             <p className="text-black/50 text-sm">
-              Made with ☺ for Volume7
+              Made with ☺ for {company}
             </p>
           </div>
         </div>

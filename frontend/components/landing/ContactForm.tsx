@@ -5,7 +5,7 @@ import { useRef, useState } from 'react'
 import { Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
 import { portfolioApi } from '@/lib/api'
 
-export function ContactForm() {
+export function ContactForm({ company }: { company: string }) {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
   const [formData, setFormData] = useState({
@@ -113,7 +113,7 @@ export function ContactForm() {
                   value={formData.company}
                   onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                   className="w-full px-4 py-3 rounded-xl border-2 border-black/20 focus:border-hot-pink focus:outline-none transition-colors bg-white"
-                  placeholder="Volume7 (hopefully!)"
+                  placeholder={`${company} (hopefully!)`}
                 />
               </div>
 

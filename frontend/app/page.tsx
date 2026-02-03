@@ -12,21 +12,29 @@ import { VibrantCTA } from '@/components/landing/VibrantCTA'
 import { VibrantFooter } from '@/components/landing/VibrantFooter'
 import { ViewCounter } from '@/components/landing/ViewCounter'
 import { CustomCursor } from '@/components/landing/CustomCursor'
+import { PasswordGate } from '@/components/landing/PasswordGate'
+import { useCompany } from '@/lib/company'
 
 export default function HomePage() {
+  const [company, setCompany] = useCompany()
+
+  if (!company) {
+    return <PasswordGate onUnlock={setCompany} />
+  }
+
   return (
     <main className="min-h-screen bg-sunny-yellow text-black overflow-x-hidden">
       <CustomCursor />
       <VibrantNavbar />
-      <VibrantHero />
+      <VibrantHero company={company} />
       <Marquee />
       <VibrantFeatures />
       <SkillBars />
-      <VibrantHowItWorks />
+      <VibrantHowItWorks company={company} />
       <Testimonials />
-      <ContactForm />
+      <ContactForm company={company} />
       <VibrantCTA />
-      <VibrantFooter />
+      <VibrantFooter company={company} />
       <ViewCounter />
     </main>
   )

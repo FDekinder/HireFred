@@ -3,34 +3,36 @@
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
 
-const steps = [
-  {
-    number: '01',
-    title: 'Big Data Dev',
-    description: 'Jan 2022 - Dec 2022 @ Bell Canada. Analyzed 10M+ records, built AI chatbot with OpenAI, cut query times by 50%. Data nerd phase unlocked.',
-    color: 'text-hot-pink',
-    borderColor: 'border-black',
-    bgColor: 'bg-black',
-  },
-  {
-    number: '02',
-    title: 'Full Stack Dev',
-    description: 'Jan 2023 - Nov 2025 @ Bell Canada. 80+ features, 1,000+ daily users, zero incidents. Built real-time collab systems. Became a PR review machine.',
-    color: 'text-sunny-yellow',
-    borderColor: 'border-black',
-    bgColor: 'bg-black',
-  },
-  {
-    number: '03',
-    title: 'Volume7?',
-    description: 'Feb 2025 - ??? Your next awesome hire! Ready to build React/Node apps, review PRs, mentor devs, and make your Slack channels funnier. 🚀',
-    color: 'text-electric-blue',
-    borderColor: 'border-black',
-    bgColor: 'bg-black',
-  },
-]
+function getSteps(company: string) {
+  return [
+    {
+      number: '01',
+      title: 'Big Data Dev',
+      description: 'Jan 2022 - Dec 2022 @ Bell Canada. Analyzed 10M+ records, built AI chatbot with OpenAI, cut query times by 50%. Data nerd phase unlocked.',
+      color: 'text-hot-pink',
+      borderColor: 'border-black',
+      bgColor: 'bg-black',
+    },
+    {
+      number: '02',
+      title: 'Full Stack Dev',
+      description: 'Jan 2023 - Nov 2025 @ Bell Canada. 80+ features, 1,000+ daily users, zero incidents. Built real-time collab systems. Became a PR review machine.',
+      color: 'text-sunny-yellow',
+      borderColor: 'border-black',
+      bgColor: 'bg-black',
+    },
+    {
+      number: '03',
+      title: `${company}?`,
+      description: `Feb 2025 - ??? Your next awesome hire! Ready to build React/Node apps, review PRs, mentor devs, and make your Slack channels funnier. 🚀`,
+      color: 'text-electric-blue',
+      borderColor: 'border-black',
+      bgColor: 'bg-black',
+    },
+  ]
+}
 
-export function VibrantHowItWorks() {
+export function VibrantHowItWorks({ company }: { company: string }) {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
 
@@ -56,7 +58,7 @@ export function VibrantHowItWorks() {
 
         {/* Steps */}
         <div className="grid md:grid-cols-3 gap-8 md:gap-4">
-          {steps.map((step, index) => (
+          {getSteps(company).map((step, index) => (
             <motion.div
               key={step.number}
               initial={{ opacity: 0, y: 30 }}
@@ -65,7 +67,7 @@ export function VibrantHowItWorks() {
               className="relative"
             >
               {/* Connector line */}
-              {index < steps.length - 1 && (
+              {index < getSteps(company).length - 1 && (
                 <div className="hidden md:block absolute top-16 left-1/2 w-full h-px bg-gradient-to-r from-black/30 to-transparent" />
               )}
 

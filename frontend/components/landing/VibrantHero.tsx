@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import { ArrowRight, Download, Coffee, Sparkles, Code2, Zap, Heart } from 'lucide-react'
 
-export function VibrantHero() {
+export function VibrantHero({ company }: { company: string }) {
   return (
     <section className="relative px-6 pt-28 pb-16 overflow-hidden">
       <div className="max-w-7xl mx-auto w-full">
@@ -31,7 +31,7 @@ export function VibrantHero() {
             >
               <span className="text-black">hey</span>
               <br />
-              <span className="text-hot-pink">Volume7</span>
+              <span className="text-hot-pink">{company}</span>
               <br />
               <span className="text-black">hire me!</span>
             </motion.h1>
