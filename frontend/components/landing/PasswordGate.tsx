@@ -94,8 +94,8 @@ export function PasswordGate({ onUnlock }: PasswordGateProps) {
         </form>
 
         {/* Hint */}
-        <p className="text-black/30 text-sm mt-8">
-          hint: it's the company name 🤫
+        <p className="text-black/20 text-xs mt-8">
+          hint: try your company name ;)
         </p>
       </motion.div>
     </div>
