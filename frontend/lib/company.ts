@@ -7,6 +7,7 @@ const PASSWORD_MAP: Record<string, string> = {
   google: 'Google',
   amazon: 'Amazon',
   poka: 'Poka',
+  dialogue: 'Dialogue',
 }
 
 export function getCompany(password: string): string | null {
