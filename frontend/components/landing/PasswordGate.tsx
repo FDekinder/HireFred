@@ -97,6 +97,9 @@ export function PasswordGate({ onUnlock }: PasswordGateProps) {
         <p className="text-black/20 text-xs mt-8">
           hint: try your company name ;)
         </p>
+        <p className="text-black/20 text-xs mt-2">
+          company not listed? try "google" as default
+        </p>
       </motion.div>
     </div>
   )
