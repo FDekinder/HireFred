@@ -9,6 +9,7 @@ const PASSWORD_MAP: Record<string, string> = {
   poka: 'Poka',
   dialogue: 'Dialogue',
   ladev: 'Ladev',
+  leeroy: 'Leeroy',
 }
 
 export function getCompany(password: string): string | null {
