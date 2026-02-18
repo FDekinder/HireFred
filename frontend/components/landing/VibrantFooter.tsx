@@ -31,6 +31,9 @@ export function VibrantFooter({ company }: { company: string }) {
             <a href="mailto:frederick.de.kinder@gmail.com" className="text-black/60 hover:text-hot-pink transition-colors font-medium">
               Contact
             </a>
+            <Link href="/hiring-progress" className="text-black/60 hover:text-hot-pink transition-colors font-medium">
+              Job Hunt
+            </Link>
           </div>
 
           {/* Social & copyright */}

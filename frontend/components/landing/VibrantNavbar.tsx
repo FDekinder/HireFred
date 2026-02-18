@@ -53,6 +53,7 @@ export function VibrantNavbar() {
           <NavItem href="#features">Skills</NavItem>
           <NavItem href="#how-it-works">Experience</NavItem>
           <NavItem href="https://linkedin.com/in/frederick-de-kinder">LinkedIn</NavItem>
+          <NavItem href="/hiring-progress">Job Hunt</NavItem>
         </div>
 
         {/* CTA buttons */}
