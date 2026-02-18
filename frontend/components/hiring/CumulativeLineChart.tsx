@@ -1,6 +1,6 @@
 'use client'
 
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, defs } from 'recharts'
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
 import { CumulativeDataPoint } from '@/lib/api'
 
 const TOOLTIP_STYLE = {
