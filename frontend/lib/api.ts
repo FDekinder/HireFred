@@ -240,3 +240,215 @@ export const portfolioApi = {
     }, FALLBACK_STATS)
   }
 }
+
+// ============================================
+// Hiring Progress Interfaces
+// ============================================
+
+export type ApplicationStatus = 'applied' | 'response' | 'interview' | 'offer' | 'rejected' | 'no_response'
+export type JobType = 'fulltime' | 'contract' | 'freelance'
+
+export interface Application {
+  id: number
+  company: string
+  role: string
+  job_type: JobType
+  date_sent: string
+  status: ApplicationStatus
+  notes?: string
+  created_at: string
+}
+
+export interface ApplicationCreate {
+  company: string
+  role: string
+  job_type: JobType
+  date_sent: string
+  status: ApplicationStatus
+  notes?: string
+}
+
+export interface RecruiterContact {
+  id: number
+  application_id?: number
+  name: string
+  company: string
+  role: string
+  last_contact_date: string
+  status: string
+  note?: string
+}
+
+export interface RecruiterContactCreate {
+  application_id?: number
+  name: string
+  company: string
+  role: string
+  last_contact_date: string
+  status: string
+  note?: string
+}
+
+export interface HiringStatusBanner {
+  id: number
+  message: string
+  is_active: boolean
+  updated_at: string
+}
+
+export interface WeeklyDataPoint {
+  week: string
+  count: number
+}
+
+export interface CumulativeDataPoint {
+  date: string
+  total: number
+}
+
+export interface DashboardStats {
+  total_sent: number
+  total_responses: number
+  response_rate: number
+  active_interviews: number
+  offers_received: number
+  status_breakdown: Partial<Record<ApplicationStatus, number>>
+  weekly_applications: WeeklyDataPoint[]
+  cumulative_applications: CumulativeDataPoint[]
+  by_job_type: Partial<Record<JobType, number>>
+}
+
+// ============================================
+// Hiring Fallback Data
+// ============================================
+
+const FALLBACK_DASHBOARD_STATS: DashboardStats = {
+  total_sent: 0,
+  total_responses: 0,
+  response_rate: 0,
+  active_interviews: 0,
+  offers_received: 0,
+  status_breakdown: {},
+  weekly_applications: Array.from({ length: 8 }, (_, i) => {
+    const d = new Date()
+    d.setDate(d.getDate() - (7 - i) * 7)
+    const year = d.getFullYear()
+    const week = Math.ceil(((d.getTime() - new Date(year, 0, 1).getTime()) / 86400000 + 1) / 7)
+    return { week: `${year}-W${String(week).padStart(2, '0')}`, count: 0 }
+  }),
+  cumulative_applications: [],
+  by_job_type: {},
+}
+
+const FALLBACK_CONTACTS: RecruiterContact[] = []
+
+const FALLBACK_BANNER: HiringStatusBanner = {
+  id: 1,
+  message: 'Actively Looking — Open to Offers — Available Now',
+  is_active: true,
+  updated_at: new Date().toISOString(),
+}
+
+// ============================================
+// Hiring API
+// ============================================
+
+export const hiringApi = {
+  async getDashboard(): Promise<DashboardStats> {
+    return tryFetchOrFallback(async () => {
+      const res = await fetch(`${API_URL}/api/hiring/dashboard`)
+      if (!res.ok) throw new Error('Failed to fetch dashboard')
+      return res.json()
+    }, FALLBACK_DASHBOARD_STATS)
+  },
+
+  async getContacts(): Promise<RecruiterContact[]> {
+    return tryFetchOrFallback(async () => {
+      const res = await fetch(`${API_URL}/api/hiring/contacts`)
+      if (!res.ok) throw new Error('Failed to fetch contacts')
+      return res.json()
+    }, FALLBACK_CONTACTS)
+  },
+
+  async getBanner(): Promise<HiringStatusBanner | null> {
+    return tryFetchOrFallback(async () => {
+      const res = await fetch(`${API_URL}/api/hiring/banner`)
+      if (!res.ok) throw new Error('Failed to fetch banner')
+      return res.json()
+    }, FALLBACK_BANNER)
+  },
+
+  async getApplications(adminKey: string): Promise<Application[]> {
+    const res = await fetch(`${API_URL}/api/hiring/applications`, {
+      headers: { 'X-Admin-Key': adminKey },
+    })
+    if (!res.ok) throw new Error('Failed to fetch applications')
+    return res.json()
+  },
+
+  async createApplication(data: ApplicationCreate, adminKey: string): Promise<Application> {
+    const res = await fetch(`${API_URL}/api/hiring/applications`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Key': adminKey },
+      body: JSON.stringify(data),
+    })
+    if (!res.ok) throw new Error('Failed to create application')
+    return res.json()
+  },
+
+  async updateApplication(id: number, data: Partial<ApplicationCreate>, adminKey: string): Promise<Application> {
+    const res = await fetch(`${API_URL}/api/hiring/applications/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Key': adminKey },
+      body: JSON.stringify(data),
+    })
+    if (!res.ok) throw new Error('Failed to update application')
+    return res.json()
+  },
+
+  async deleteApplication(id: number, adminKey: string): Promise<void> {
+    const res = await fetch(`${API_URL}/api/hiring/applications/${id}`, {
+      method: 'DELETE',
+      headers: { 'X-Admin-Key': adminKey },
+    })
+    if (!res.ok) throw new Error('Failed to delete application')
+  },
+
+  async createContact(data: RecruiterContactCreate, adminKey: string): Promise<RecruiterContact> {
+    const res = await fetch(`${API_URL}/api/hiring/contacts`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Key': adminKey },
+      body: JSON.stringify(data),
+    })
+    if (!res.ok) throw new Error('Failed to create contact')
+    return res.json()
+  },
+
+  async updateContact(id: number, data: Partial<RecruiterContactCreate>, adminKey: string): Promise<RecruiterContact> {
+    const res = await fetch(`${API_URL}/api/hiring/contacts/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Key': adminKey },
+      body: JSON.stringify(data),
+    })
+    if (!res.ok) throw new Error('Failed to update contact')
+    return res.json()
+  },
+
+  async deleteContact(id: number, adminKey: string): Promise<void> {
+    const res = await fetch(`${API_URL}/api/hiring/contacts/${id}`, {
+      method: 'DELETE',
+      headers: { 'X-Admin-Key': adminKey },
+    })
+    if (!res.ok) throw new Error('Failed to delete contact')
+  },
+
+  async updateBanner(data: { message?: string; is_active?: boolean }, adminKey: string): Promise<HiringStatusBanner> {
+    const res = await fetch(`${API_URL}/api/hiring/banner`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Key': adminKey },
+      body: JSON.stringify(data),
+    })
+    if (!res.ok) throw new Error('Failed to update banner')
+    return res.json()
+  },
+}

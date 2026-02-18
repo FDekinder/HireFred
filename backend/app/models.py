@@ -81,3 +81,122 @@ class Token(SQLModel):
 class LoginRequest(SQLModel):
     email: str
     password: str
+
+
+# ── Hiring Progress Models ─────────────────────────────────────────────────────
+
+class ApplicationStatus(str, Enum):
+    applied = "applied"
+    response = "response"
+    interview = "interview"
+    offer = "offer"
+    rejected = "rejected"
+    no_response = "no_response"
+
+class JobType(str, Enum):
+    fulltime = "fulltime"
+    contract = "contract"
+    freelance = "freelance"
+
+class Application(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    company: str = Field(max_length=200)
+    role: str = Field(max_length=200)
+    job_type: JobType = Field(default=JobType.fulltime)
+    date_sent: str  # ISO "YYYY-MM-DD"
+    status: ApplicationStatus = Field(default=ApplicationStatus.applied)
+    notes: Optional[str] = None
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+class ApplicationCreate(SQLModel):
+    company: str
+    role: str
+    job_type: JobType = JobType.fulltime
+    date_sent: str
+    status: ApplicationStatus = ApplicationStatus.applied
+    notes: Optional[str] = None
+
+class ApplicationUpdate(SQLModel):
+    company: Optional[str] = None
+    role: Optional[str] = None
+    job_type: Optional[JobType] = None
+    date_sent: Optional[str] = None
+    status: Optional[ApplicationStatus] = None
+    notes: Optional[str] = None
+
+class ApplicationRead(SQLModel):
+    id: int
+    company: str
+    role: str
+    job_type: JobType
+    date_sent: str
+    status: ApplicationStatus
+    notes: Optional[str]
+    created_at: datetime
+
+class RecruiterContact(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    application_id: Optional[int] = Field(default=None, foreign_key="application.id")
+    name: str = Field(max_length=200)
+    company: str = Field(max_length=200)
+    role: str = Field(max_length=200)
+    last_contact_date: str  # ISO "YYYY-MM-DD"
+    status: str = Field(default="active", max_length=100)
+    note: Optional[str] = None
+
+class RecruiterContactCreate(SQLModel):
+    application_id: Optional[int] = None
+    name: str
+    company: str
+    role: str
+    last_contact_date: str
+    status: str = "active"
+    note: Optional[str] = None
+
+class RecruiterContactUpdate(SQLModel):
+    application_id: Optional[int] = None
+    name: Optional[str] = None
+    company: Optional[str] = None
+    role: Optional[str] = None
+    last_contact_date: Optional[str] = None
+    status: Optional[str] = None
+    note: Optional[str] = None
+
+class RecruiterContactRead(SQLModel):
+    id: int
+    application_id: Optional[int]
+    name: str
+    company: str
+    role: str
+    last_contact_date: str
+    status: str
+    note: Optional[str]
+
+class StatusBanner(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    message: str
+    is_active: bool = Field(default=True)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+class StatusBannerUpdate(SQLModel):
+    message: Optional[str] = None
+    is_active: Optional[bool] = None
+
+class WeeklyDataPoint(SQLModel):
+    week: str
+    count: int
+
+class CumulativeDataPoint(SQLModel):
+    date: str
+    total: int
+
+class DashboardStats(SQLModel):
+    total_sent: int
+    total_responses: int
+    response_rate: float
+    active_interviews: int
+    offers_received: int
+    status_breakdown: dict
+    weekly_applications: List[WeeklyDataPoint]
+    cumulative_applications: List[CumulativeDataPoint]
+    by_job_type: dict
