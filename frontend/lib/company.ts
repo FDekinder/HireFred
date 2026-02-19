@@ -2,23 +2,6 @@
 
 import { useState, useEffect } from 'react'
 
-const PASSWORD_MAP: Record<string, string> = {
-  volume7: 'Volume7',
-  google: 'Google',
-  amazon: 'Amazon',
-  poka: 'Poka',
-  dialogue: 'Dialogue',
-  ladev: 'Ladev',
-  leeroy: 'Leeroy',
-  shopify: 'Shopify',
-  affordancestudio  : 'Affordance Studio',
-
-}
-
-export function getCompany(password: string): string | null {
-  return PASSWORD_MAP[password.toLowerCase()] || null
-}
-
 export function useCompany(): [string | null, (name: string | null) => void] {
   const [company, setCompany] = useState<string | null>(null)
 

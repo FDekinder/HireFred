@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Lock, ArrowRight } from 'lucide-react'
-import { getCompany } from '@/lib/company'
 
 interface PasswordGateProps {
   onUnlock: (company: string) => void
@@ -13,17 +12,28 @@ export function PasswordGate({ onUnlock }: PasswordGateProps) {
   const [password, setPassword] = useState('')
   const [error, setError] = useState(false)
   const [shaking, setShaking] = useState(false)
+  const [loading, setLoading] = useState(false)
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    const company = getCompany(password)
-    if (company) {
-      onUnlock(company)
-    } else {
-      setError(true)
-      setShaking(true)
-      setTimeout(() => setShaking(false), 600)
-      setTimeout(() => setError(false), 3000)
+    setLoading(true)
+    try {
+      const res = await fetch('/api/unlock', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+      })
+      const { company } = await res.json()
+      if (company) {
+        onUnlock(company)
+      } else {
+        setError(true)
+        setShaking(true)
+        setTimeout(() => setShaking(false), 600)
+        setTimeout(() => setError(false), 3000)
+      }
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -64,7 +74,8 @@ export function PasswordGate({ onUnlock }: PasswordGateProps) {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="type the password..."
               autoFocus
-              className="w-full px-6 py-4 text-lg rounded-2xl border-4 border-black/20 focus:border-hot-pink focus:outline-none transition-colors bg-white text-black text-center font-bold placeholder:font-normal placeholder:text-black/30"
+              disabled={loading}
+              className="w-full px-6 py-4 text-lg rounded-2xl border-4 border-black/20 focus:border-hot-pink focus:outline-none transition-colors bg-white text-black text-center font-bold placeholder:font-normal placeholder:text-black/30 disabled:opacity-60"
             />
           </motion.div>
 
@@ -84,11 +95,12 @@ export function PasswordGate({ onUnlock }: PasswordGateProps) {
 
           <motion.button
             type="submit"
-            className="mt-6 px-8 py-4 bg-black text-sunny-yellow font-bold text-lg rounded-full hover:bg-hot-pink hover:text-white transition-colors flex items-center gap-3 mx-auto"
+            disabled={loading}
+            className="mt-6 px-8 py-4 bg-black text-sunny-yellow font-bold text-lg rounded-full hover:bg-hot-pink hover:text-white transition-colors flex items-center gap-3 mx-auto disabled:opacity-60"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            Let me in!
+            {loading ? 'checking...' : 'Let me in!'}
             <ArrowRight className="w-5 h-5" />
           </motion.button>
         </form>
