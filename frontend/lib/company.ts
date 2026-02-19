@@ -11,6 +11,8 @@ const PASSWORD_MAP: Record<string, string> = {
   ladev: 'Ladev',
   leeroy: 'Leeroy',
   shopify: 'Shopify',
+  affordancestudio  : 'Affordance Studio',
+
 }
 
 export function getCompany(password: string): string | null {
