@@ -86,6 +86,7 @@ export interface Translations {
     sendingButton: string
     successTitle: string
     sendAnother: string
+    errorText: string
   }
   cta: {
     badge: string

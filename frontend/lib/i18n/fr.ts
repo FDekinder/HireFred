@@ -88,6 +88,7 @@ export const fr: Translations = {
     sendingButton: "Envoi vers l'API...",
     successTitle: 'Message envoyé !',
     sendAnother: 'Envoyer un autre',
+    errorText: 'Backend non connecté. Démarrez-le avec : uvicorn app.main:app --reload',
   },
   cta: {
     badge: 'Disponible immédiatement',
