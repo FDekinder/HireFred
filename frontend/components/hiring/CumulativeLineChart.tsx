@@ -2,6 +2,7 @@
 
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
 import { CumulativeDataPoint } from '@/lib/api'
+import { useLanguage } from '@/lib/i18n/context'
 
 const TOOLTIP_STYLE = {
   background: 'rgba(0,0,0,0.85)',
@@ -12,6 +13,7 @@ const TOOLTIP_STYLE = {
 }
 
 export function CumulativeLineChart({ data }: { data: CumulativeDataPoint[] }) {
+  const { t } = useLanguage()
   // Sample down to ~20 points for readability
   const displayData = data.length > 20
     ? data.filter((_, i) => i % Math.ceil(data.length / 20) === 0 || i === data.length - 1)
@@ -20,15 +22,15 @@ export function CumulativeLineChart({ data }: { data: CumulativeDataPoint[] }) {
   if (displayData.length === 0) {
     return (
       <div className="glass-card p-6 flex flex-col items-center justify-center h-full min-h-[280px]">
-        <h3 className="text-lg font-bold mb-2 text-white">Cumulative Applications</h3>
-        <p className="text-white/30 text-sm">No data yet</p>
+        <h3 className="text-lg font-bold mb-2 text-white">{t.charts.cumulativeTitle}</h3>
+        <p className="text-white/30 text-sm">{t.charts.cumulativeEmpty}</p>
       </div>
     )
   }
 
   return (
     <div className="glass-card p-6">
-      <h3 className="text-lg font-bold mb-6 text-white">Cumulative Applications</h3>
+      <h3 className="text-lg font-bold mb-6 text-white">{t.charts.cumulativeTitle}</h3>
       <ResponsiveContainer width="100%" height={220}>
         <AreaChart data={displayData} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
           <defs>

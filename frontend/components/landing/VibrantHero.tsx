@@ -1,9 +1,29 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ArrowRight, Download, Coffee, Sparkles, Code2, Zap, Heart } from 'lucide-react'
+import { ArrowRight, Download, Coffee, Sparkles, Code2, Zap, Heart, Users, TrendingUp, Star } from 'lucide-react'
+import { useLanguage } from '@/lib/i18n/context'
 
-export function VibrantHero({ company }: { company: string }) {
+type CareerMode = 'dev' | 'csm'
+
+export function VibrantHero({ company, mode = 'dev' }: { company: string; mode?: CareerMode }) {
+  const { t } = useLanguage()
+
+  const stats = mode === 'csm'
+    ? [
+        { value: '20+', label: t.csm.heroStat1 },
+        { value: '12', label: t.csm.heroStat2 },
+        { value: '4x', label: t.csm.heroStat3 },
+      ]
+    : [
+        { value: '3+', label: t.hero.stat1Label },
+        { value: '80+', label: t.hero.stat2Label },
+        { value: '0', label: t.hero.stat3Label },
+      ]
+
+  const badge = mode === 'csm' ? t.csm.heroBadge : t.hero.badge
+  const subtitle = mode === 'csm' ? t.csm.heroSubtitle : t.hero.subtitle
+
   return (
     <section className="relative px-6 pt-28 pb-16 overflow-hidden">
       <div className="max-w-7xl mx-auto w-full">
@@ -18,7 +38,7 @@ export function VibrantHero({ company }: { company: string }) {
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full border-2 border-black/20 bg-black/10 mb-8"
             >
               <Sparkles className="w-4 h-4 text-hot-pink fill-hot-pink" />
-              <span className="text-black font-semibold text-sm">Status: Available & Ready to Ship Code</span>
+              <span className="text-black font-semibold text-sm">{badge}</span>
               <Coffee className="w-4 h-4 text-black" />
             </motion.div>
 
@@ -29,11 +49,11 @@ export function VibrantHero({ company }: { company: string }) {
               transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
               className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-[0.9] tracking-tighter mb-8"
             >
-              <span className="text-black">hey</span>
+              <span className="text-black">{t.hero.headlineHey}</span>
               <br />
               <span className="text-hot-pink">{company}</span>
               <br />
-              <span className="text-black">hire me!</span>
+              <span className="text-black">{t.hero.headlineHireMe}</span>
             </motion.h1>
 
             {/* Subtitle */}
@@ -43,9 +63,7 @@ export function VibrantHero({ company }: { company: string }) {
               transition={{ duration: 0.6, delay: 0.5 }}
               className="text-lg md:text-xl text-black/70 max-w-lg mx-auto lg:mx-0 mb-10 font-medium"
             >
-              I'm <span className="font-black text-black">Frederick De Kinder</span> — a Full Stack Developer
-              who ships 80+ features with zero critical incidents. I turn coffee into clean code
-              and deadlines into done deals. ☕→💻→🚀
+              {subtitle}
             </motion.p>
 
             {/* CTA Buttons */}
@@ -61,7 +79,7 @@ export function VibrantHero({ company }: { company: string }) {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  Let's Talk!
+                  {t.hero.ctaTalk}
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </motion.button>
               </a>
@@ -72,7 +90,7 @@ export function VibrantHero({ company }: { company: string }) {
                   whileTap={{ scale: 0.95 }}
                 >
                   <Download className="w-5 h-5" />
-                  LinkedIn
+                  {t.hero.ctaLinkedin}
                 </motion.button>
               </a>
             </motion.div>
@@ -84,11 +102,7 @@ export function VibrantHero({ company }: { company: string }) {
               transition={{ duration: 0.6, delay: 0.9 }}
               className="flex flex-wrap items-center justify-center lg:justify-start gap-8 mt-12 pt-8 border-t border-black/10"
             >
-              {[
-                { value: '3+', label: 'Years Shipping Code' },
-                { value: '80+', label: 'Features Deployed' },
-                { value: '0', label: 'Critical Incidents 😎' },
-              ].map((stat) => (
+              {stats.map((stat) => (
                 <div key={stat.label} className="text-center lg:text-left">
                   <div className="text-3xl md:text-4xl font-black text-black">{stat.value}</div>
                   <div className="text-black/50 font-medium text-sm">{stat.label}</div>
@@ -111,7 +125,10 @@ export function VibrantHero({ company }: { company: string }) {
                 animate={{ rotate: [0, 5, -5, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
               >
-                <Code2 className="w-16 h-16 text-sunny-yellow" />
+                {mode === 'csm'
+                  ? <Users className="w-16 h-16 text-sunny-yellow" />
+                  : <Code2 className="w-16 h-16 text-sunny-yellow" />
+                }
               </motion.div>
 
               {/* Orbiting icons */}
@@ -120,7 +137,10 @@ export function VibrantHero({ company }: { company: string }) {
                 animate={{ y: [0, -10, 0] }}
                 transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
               >
-                <Zap className="w-8 h-8 text-white" />
+                {mode === 'csm'
+                  ? <TrendingUp className="w-8 h-8 text-white" />
+                  : <Zap className="w-8 h-8 text-white" />
+                }
               </motion.div>
 
               <motion.div
@@ -136,7 +156,10 @@ export function VibrantHero({ company }: { company: string }) {
                 animate={{ x: [0, -10, 0] }}
                 transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
               >
-                <Coffee className="w-8 h-8 text-black" />
+                {mode === 'csm'
+                  ? <Star className="w-8 h-8 text-black fill-black" />
+                  : <Coffee className="w-8 h-8 text-black" />
+                }
               </motion.div>
 
               <motion.div

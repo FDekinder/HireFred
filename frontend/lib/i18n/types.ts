@@ -162,6 +162,58 @@ export interface Translations {
     errorText: string
     backLink: string
   }
+  csm: {
+    toggleDev: string
+    toggleCsm: string
+    heroBadge: string
+    heroSubtitle: string
+    heroStat1: string
+    heroStat2: string
+    heroStat3: string
+    featBadge: string
+    featHeading1: string
+    featHeading2: string
+    featSubtitle: string
+    card1Title: string
+    card1Desc: string
+    card2Title: string
+    card2Desc: string
+    card3Title: string
+    card3Desc: string
+    card4Title: string
+    card4Desc: string
+    card5Title: string
+    card5Desc: string
+    card6Title: string
+    card6Desc: string
+    timelineTitle: string
+    timelineSubtitle: string
+    tl1Company: string
+    tl1Period: string
+    tl1Role: string
+    tl1Desc: string
+    tl2Company: string
+    tl2Period: string
+    tl2Role: string
+    tl2Desc: string
+    tl3Company: string
+    tl3Period: string
+    tl3Role: string
+    tl3Desc: string
+    tl4Company: string
+    tl4Period: string
+    tl4Role: string
+    tl4Desc: string
+    howBadge: string
+    howHeading1: string
+    howHeading2: string
+    howStep1Title: string
+    howStep1Desc: string
+    howStep2Title: string
+    howStep2Desc: string
+    howStep3Title: string
+    howStep3Desc: string
+  }
   adminDashboard: {
     title: string
     subtitle: string

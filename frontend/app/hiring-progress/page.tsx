@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { hiringApi, DashboardStats, RecruiterContact, HiringStatusBanner } from '@/lib/api'
 import { StatusBannerWidget } from '@/components/hiring/StatusBannerWidget'
+import { useLanguage } from '@/lib/i18n/context'
 import { KpiCards } from '@/components/hiring/KpiCards'
 import { WeeklyBarChart } from '@/components/hiring/WeeklyBarChart'
 import { StatusDonutChart } from '@/components/hiring/StatusDonutChart'
@@ -13,6 +14,7 @@ import { JobTypeBarChart } from '@/components/hiring/JobTypeBarChart'
 import { ContactsTable } from '@/components/hiring/ContactsTable'
 
 export default function HiringProgressPage() {
+  const { t } = useLanguage()
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [contacts, setContacts] = useState<RecruiterContact[]>([])
   const [banner, setBanner] = useState<HiringStatusBanner | null>(null)
@@ -41,17 +43,17 @@ export default function HiringProgressPage() {
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
             <h1 className="text-3xl md:text-4xl font-black gradient-text-vibrant">
-              Job Search Dashboard
+              {t.hiringDashboard.title}
             </h1>
             <p className="text-white/40 mt-1 text-sm">
-              Frederick De Kinder — Live Job Hunt Tracker
+              {t.hiringDashboard.subtitle}
             </p>
           </div>
           <Link
             href="/"
             className="text-white/40 hover:text-lime transition-colors text-sm font-medium"
           >
-            ← Back to Portfolio
+            {t.hiringDashboard.backToPortfolio}
           </Link>
         </div>
       </header>
@@ -116,7 +118,7 @@ export default function HiringProgressPage() {
 
         {/* Footer note */}
         <p className="text-center text-white/20 text-xs pb-4">
-          Updated in real time · Last fetched {new Date().toLocaleDateString()}
+          {t.hiringDashboard.updatedText} {new Date().toLocaleDateString()}
         </p>
       </div>
 
@@ -126,7 +128,7 @@ export default function HiringProgressPage() {
           href="/hiring-progress/admin"
           className="text-white/15 hover:text-white/40 text-xs transition-colors"
         >
-          Admin
+          {t.hiringDashboard.adminLink}
         </Link>
       </div>
     </main>

@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Heart } from 'lucide-react'
+import { useLanguage } from '@/lib/i18n/context'
 
 function NavItem({ href, children }: { href: string; children: React.ReactNode }) {
   return (
@@ -23,6 +24,8 @@ function NavItem({ href, children }: { href: string; children: React.ReactNode }
 }
 
 export function VibrantNavbar() {
+  const { lang, setLang, t } = useLanguage()
+
   return (
     <motion.nav
       initial={{ y: -100, opacity: 0 }}
@@ -50,10 +53,30 @@ export function VibrantNavbar() {
 
         {/* Nav links */}
         <div className="hidden md:flex items-center gap-1">
-          <NavItem href="#features">Skills</NavItem>
-          <NavItem href="#how-it-works">Experience</NavItem>
-          <NavItem href="https://linkedin.com/in/frederick-de-kinder">LinkedIn</NavItem>
-          <NavItem href="/hiring-progress">Job Hunt</NavItem>
+          <NavItem href="#features">{t.navbar.skills}</NavItem>
+          <NavItem href="#how-it-works">{t.navbar.experience}</NavItem>
+          <NavItem href="https://linkedin.com/in/frederick-de-kinder">{t.navbar.linkedin}</NavItem>
+          <NavItem href="/hiring-progress">{t.navbar.jobHunt}</NavItem>
+
+          {/* Language toggle */}
+          <div className="flex items-center gap-1 bg-white/10 rounded-full p-1 ml-2">
+            <button
+              onClick={() => setLang('en')}
+              className={`px-3 py-1 rounded-full text-sm font-bold transition-colors ${
+                lang === 'en' ? 'bg-white text-black' : 'text-white/60 hover:text-white'
+              }`}
+            >
+              EN
+            </button>
+            <button
+              onClick={() => setLang('fr')}
+              className={`px-3 py-1 rounded-full text-sm font-bold transition-colors ${
+                lang === 'fr' ? 'bg-white text-black' : 'text-white/60 hover:text-white'
+              }`}
+            >
+              FR
+            </button>
+          </div>
         </div>
 
         {/* CTA buttons */}
@@ -64,7 +87,7 @@ export function VibrantNavbar() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <span className="text-white group-hover:opacity-0 transition-opacity">Call Me</span>
+              <span className="text-white group-hover:opacity-0 transition-opacity">{t.navbar.callMe}</span>
               <span className="text-sunny-yellow text-3xl absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">☺</span>
             </motion.button>
           </a>
@@ -74,7 +97,7 @@ export function VibrantNavbar() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <span className="group-hover:opacity-0 transition-opacity">Hire Me!</span>
+              <span className="group-hover:opacity-0 transition-opacity">{t.navbar.hireMe}</span>
               <span className="text-3xl absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">☺</span>
             </motion.button>
           </a>

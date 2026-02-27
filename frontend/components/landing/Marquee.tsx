@@ -1,20 +1,23 @@
 'use client'
 
 import { motion } from 'framer-motion'
-
-const words = [
-  'HIRE ME',
-  'I AM OBVIOUSLY AWESOME',
-  'VUE.JS 3',
-  'TYPESCRIPT',
-  'PYTHON',
-  'FASTAPI',
-  'REACT (LEARNING)',
-  'HIRE ME',
-  'I AM OBVIOUSLY AWESOME',
-]
+import { useLanguage } from '@/lib/i18n/context'
 
 export function Marquee() {
+  const { t } = useLanguage()
+
+  const words = [
+    t.marquee.hireMe,
+    t.marquee.awesome,
+    'VUE.JS 3',
+    'TYPESCRIPT',
+    'PYTHON',
+    'FASTAPI',
+    'REACT (LEARNING)',
+    t.marquee.hireMe,
+    t.marquee.awesome,
+  ]
+
   return (
     <div className="py-8 overflow-hidden border-y-4 border-black bg-black">
       <div className="flex whitespace-nowrap">

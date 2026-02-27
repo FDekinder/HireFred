@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { RecruiterContact } from '@/lib/api'
+import { useLanguage } from '@/lib/i18n/context'
 
 const STATUS_COLORS: Record<string, string> = {
   active: 'text-lime border-lime/30 bg-lime/10',
@@ -11,14 +12,25 @@ const STATUS_COLORS: Record<string, string> = {
 }
 
 export function ContactsTable({ contacts }: { contacts: RecruiterContact[] }) {
+  const { t } = useLanguage()
+
+  const columns = [
+    t.contactsTable.colName,
+    t.contactsTable.colCompany,
+    t.contactsTable.colRole,
+    t.contactsTable.colLastContact,
+    t.contactsTable.colStatus,
+    t.contactsTable.colNote,
+  ]
+
   return (
     <div className="glass-card p-6">
-      <h3 className="text-lg font-bold mb-6 text-white">Recruiter & Hiring Manager Contacts</h3>
+      <h3 className="text-lg font-bold mb-6 text-white">{t.contactsTable.title}</h3>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-white/10">
-              {['Name', 'Company', 'Role', 'Last Contact', 'Status', 'Note'].map(col => (
+              {columns.map(col => (
                 <th key={col} className="text-left py-3 px-4 text-white/40 font-medium text-xs uppercase tracking-wider">
                   {col}
                 </th>
@@ -52,7 +64,7 @@ export function ContactsTable({ contacts }: { contacts: RecruiterContact[] }) {
           </tbody>
         </table>
         {contacts.length === 0 && (
-          <p className="text-center py-10 text-white/30 text-sm">No contacts recorded yet.</p>
+          <p className="text-center py-10 text-white/30 text-sm">{t.contactsTable.empty}</p>
         )}
       </div>
     </div>

@@ -4,8 +4,10 @@ import { motion, useInView } from 'framer-motion'
 import { useRef, useState } from 'react'
 import { Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
 import { portfolioApi } from '@/lib/api'
+import { useLanguage } from '@/lib/i18n/context'
 
 export function ContactForm({ company }: { company: string }) {
+  const { t } = useLanguage()
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
   const [formData, setFormData] = useState({
@@ -28,7 +30,7 @@ export function ContactForm({ company }: { company: string }) {
       setFormData({ name: '', email: '', company: '', message: '' })
     } catch {
       setStatus('error')
-      setResponseMessage('Backend not connected. Start it with: uvicorn app.main:app --reload')
+      setResponseMessage(t.contact.errorText ?? 'Backend not connected. Start it with: uvicorn app.main:app --reload')
     }
   }
 
@@ -43,18 +45,18 @@ export function ContactForm({ company }: { company: string }) {
         >
           <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-black/10 border-2 border-black/20 text-black/70 text-sm font-medium mb-6">
             <span className="w-2 h-2 rounded-full bg-hot-pink animate-pulse" />
-            Backend Form Handler
+            {t.contact.badge}
           </span>
           <h2 className="text-4xl md:text-5xl font-black text-black mb-4">
-            reach out
+            {t.contact.headingLine1}
             <br />
-            <span className="text-hot-pink">directly</span>
+            <span className="text-hot-pink">{t.contact.headingLine2}</span>
           </h2>
           <p className="text-black/60">
-            This form posts to the FastAPI backend. Try it out!
+            {t.contact.subtitle}
           </p>
           <p className="text-black/40 text-sm mt-2 italic">
-            Note: I won't receive this message - it's just to show you my API works ;) Email me or call me to reach me!
+            {t.contact.note}
           </p>
         </motion.div>
 
@@ -70,31 +72,31 @@ export function ContactForm({ company }: { company: string }) {
               className="bg-vibrant-green/20 border-2 border-vibrant-green rounded-3xl p-8 text-center"
             >
               <CheckCircle className="w-16 h-16 text-vibrant-green mx-auto mb-4" />
-              <h3 className="text-2xl font-bold text-black mb-2">Message Sent!</h3>
+              <h3 className="text-2xl font-bold text-black mb-2">{t.contact.successTitle}</h3>
               <p className="text-black/70">{responseMessage}</p>
               <button
                 onClick={() => setStatus('idle')}
                 className="mt-6 px-6 py-2 bg-black text-white rounded-full hover:bg-hot-pink transition-colors"
               >
-                Send Another
+                {t.contact.sendAnother}
               </button>
             </motion.div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-bold text-black mb-2">Name *</label>
+                  <label className="block text-sm font-bold text-black mb-2">{t.contact.labelName}</label>
                   <input
                     type="text"
                     required
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     className="w-full px-4 py-3 rounded-xl border-2 border-black/20 focus:border-hot-pink focus:outline-none transition-colors bg-white"
-                    placeholder="Your name"
+                    placeholder={t.contact.placeholderName}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-black mb-2">Email *</label>
+                  <label className="block text-sm font-bold text-black mb-2">{t.contact.labelEmail}</label>
                   <input
                     type="email"
                     required
@@ -107,25 +109,25 @@ export function ContactForm({ company }: { company: string }) {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-black mb-2">Company</label>
+                <label className="block text-sm font-bold text-black mb-2">{t.contact.labelCompany}</label>
                 <input
                   type="text"
                   value={formData.company}
                   onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                   className="w-full px-4 py-3 rounded-xl border-2 border-black/20 focus:border-hot-pink focus:outline-none transition-colors bg-white"
-                  placeholder={`${company} (hopefully!)`}
+                  placeholder={`${company} ${t.contact.companyPlaceholder}`}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-black mb-2">Message *</label>
+                <label className="block text-sm font-bold text-black mb-2">{t.contact.labelMessage}</label>
                 <textarea
                   required
                   rows={4}
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   className="w-full px-4 py-3 rounded-xl border-2 border-black/20 focus:border-hot-pink focus:outline-none transition-colors bg-white resize-none"
-                  placeholder="Tell me about the role, or just say hi!"
+                  placeholder={t.contact.placeholderMessage}
                 />
               </div>
 
@@ -150,12 +152,12 @@ export function ContactForm({ company }: { company: string }) {
                 {status === 'loading' ? (
                   <>
                     <Loader2 className="w-5 h-5 animate-spin" />
-                    Sending to API...
+                    {t.contact.sendingButton}
                   </>
                 ) : (
                   <>
                     <Send className="w-5 h-5" />
-                    Send Message
+                    {t.contact.submitButton}
                   </>
                 )}
               </motion.button>

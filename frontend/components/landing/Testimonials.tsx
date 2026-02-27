@@ -4,8 +4,10 @@ import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { useRef, useState, useEffect } from 'react'
 import { Quote, RefreshCw, Loader2 } from 'lucide-react'
 import { portfolioApi, Testimonial } from '@/lib/api'
+import { useLanguage } from '@/lib/i18n/context'
 
 export function Testimonials() {
+  const { t } = useLanguage()
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
   const [testimonials, setTestimonials] = useState<Testimonial[]>([])
@@ -33,7 +35,7 @@ export function Testimonials() {
       setTestimonials(data.testimonials)
       setError(null)
     } catch {
-      setError('Backend not connected - start it with: uvicorn app.main:app --reload')
+      setError(t.testimonials.errorText)
     } finally {
       setLoading(false)
     }
@@ -52,15 +54,15 @@ export function Testimonials() {
         >
           <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-black/10 border-2 border-black/20 text-black/70 text-sm font-medium mb-6">
             <span className="w-2 h-2 rounded-full bg-vibrant-green animate-pulse" />
-            Live from Backend API
+            {t.testimonials.badge}
           </span>
           <h2 className="text-4xl md:text-5xl font-black text-black mb-4">
-            what they say
+            {t.testimonials.headingLine1}
             <br />
-            <span className="text-hot-pink">about my work</span>
+            <span className="text-hot-pink">{t.testimonials.headingLine2}</span>
           </h2>
           <p className="text-black/60">
-            Real achievements, fetched dynamically from the API. Refresh to shuffle!
+            {t.testimonials.subtitle}
           </p>
         </motion.div>
 
@@ -74,7 +76,7 @@ export function Testimonials() {
             {loading ? (
               <div className="flex flex-col items-center justify-center gap-4 text-white/60">
                 <Loader2 className="w-8 h-8 animate-spin" />
-                <p>Fetching from backend...</p>
+                <p>{t.testimonials.loadingText}</p>
               </div>
             ) : error ? (
               <div className="text-center">
@@ -84,7 +86,7 @@ export function Testimonials() {
                   className="inline-flex items-center gap-2 px-4 py-2 bg-hot-pink text-white rounded-full hover:bg-sunny-yellow hover:text-black transition-colors"
                 >
                   <RefreshCw className="w-4 h-4" />
-                  Retry
+                  {t.testimonials.retryButton}
                 </button>
               </div>
             ) : currentTestimonial ? (

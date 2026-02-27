@@ -4,8 +4,10 @@ import { motion, useInView } from 'framer-motion'
 import { useRef, useState, useEffect } from 'react'
 import { Loader2 } from 'lucide-react'
 import { portfolioApi, Skill } from '@/lib/api'
+import { useLanguage } from '@/lib/i18n/context'
 
 export function SkillBars() {
+  const { t } = useLanguage()
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
   const [skills, setSkills] = useState<Skill[]>([])
@@ -51,14 +53,14 @@ export function SkillBars() {
         >
           <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border-2 border-white/20 text-white/70 text-sm font-medium mb-6">
             <span className="w-2 h-2 rounded-full bg-sunny-yellow animate-pulse" />
-            Dynamic Skill Data
+            {t.skills.badge}
           </span>
           <h2 className="text-4xl md:text-5xl font-black text-white mb-4">
-            skill
-            <span className="text-hot-pink"> proficiency</span>
+            {t.skills.headingLine1}
+            <span className="text-hot-pink"> {t.skills.headingLine2}</span>
           </h2>
           <p className="text-white/60 mb-2">
-            Filter by category — data fetched from API
+            {t.skills.subtitle}
           </p>
           {avgProficiency > 0 && (
             <p className="text-sunny-yellow font-bold">
@@ -82,7 +84,7 @@ export function SkillBars() {
                 : 'bg-white/10 text-white hover:bg-white/20'
             }`}
           >
-            All
+            {t.skills.filterAll}
           </button>
           {categories.map((cat) => (
             <button
@@ -104,11 +106,11 @@ export function SkillBars() {
           {loading ? (
             <div className="flex items-center justify-center py-12 text-white/60">
               <Loader2 className="w-6 h-6 animate-spin mr-2" />
-              Loading from API...
+              {t.skills.loadingText}
             </div>
           ) : skills.length === 0 ? (
             <div className="text-center py-12 text-white/60">
-              Backend not connected. Start it with: uvicorn app.main:app --reload
+              {t.skills.errorText}
             </div>
           ) : (
             skills.map((skill, index) => (

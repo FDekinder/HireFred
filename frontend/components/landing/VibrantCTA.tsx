@@ -3,8 +3,10 @@
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
 import { ArrowRight, Sparkles, Mail, Phone, MapPin } from 'lucide-react'
+import { useLanguage } from '@/lib/i18n/context'
 
 export function VibrantCTA() {
+  const { t } = useLanguage()
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
 
@@ -40,7 +42,7 @@ export function VibrantCTA() {
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-sunny-yellow/20 text-sunny-yellow text-sm font-semibold mb-8"
             >
               <Sparkles className="w-4 h-4" />
-              Available Immediately
+              {t.cta.badge}
             </motion.div>
 
             <motion.h2
@@ -49,9 +51,9 @@ export function VibrantCTA() {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="text-4xl md:text-6xl lg:text-7xl font-black text-white mb-6 leading-tight"
             >
-              let's build
+              {t.cta.headingLine1}
               <br />
-              <span className="text-sunny-yellow">something awesome!</span>
+              <span className="text-sunny-yellow">{t.cta.headingLine2}</span>
             </motion.h2>
 
             <motion.p
@@ -60,8 +62,7 @@ export function VibrantCTA() {
               transition={{ duration: 0.5, delay: 0.4 }}
               className="text-xl text-white/60 mb-10 max-w-xl mx-auto"
             >
-              I speak French (natively) and English (professionally). I work hybrid, remote, or on-site.
-              Basically, I'm flexible like a yoga instructor who codes.
+              {t.cta.subtitle}
             </motion.p>
 
             {/* Contact Info */}
@@ -97,7 +98,7 @@ export function VibrantCTA() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  Hire Me Now!
+                  {t.cta.hireMeButton}
                   <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
                 </motion.button>
               </a>
@@ -107,7 +108,7 @@ export function VibrantCTA() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  LinkedIn
+                  {t.cta.linkedinButton}
                 </motion.button>
               </a>
             </motion.div>

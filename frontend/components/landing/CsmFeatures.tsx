@@ -2,21 +2,21 @@
 
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
-import { Code2, Server, Database, Zap, Users, Brain } from 'lucide-react'
+import { Users, Code2, MessageCircle, Crown, BarChart2, TrendingUp } from 'lucide-react'
 import { useLanguage } from '@/lib/i18n/context'
 
-export function VibrantFeatures() {
+export function CsmFeatures() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
   const { t } = useLanguage()
 
   const features = [
-    { icon: Code2, title: t.features.card1Title, description: t.features.card1Desc, color: 'bg-black', textColor: 'text-sunny-yellow' },
-    { icon: Server, title: t.features.card2Title, description: t.features.card2Desc, color: 'bg-hot-pink', textColor: 'text-white' },
-    { icon: Database, title: t.features.card3Title, description: t.features.card3Desc, color: 'bg-electric-blue', textColor: 'text-black' },
-    { icon: Zap, title: t.features.card4Title, description: t.features.card4Desc, color: 'bg-black', textColor: 'text-white' },
-    { icon: Users, title: t.features.card5Title, description: t.features.card5Desc, color: 'bg-vibrant-green', textColor: 'text-black' },
-    { icon: Brain, title: t.features.card6Title, description: t.features.card6Desc, color: 'bg-hot-pink', textColor: 'text-white' },
+    { icon: Users, title: t.csm.card1Title, description: t.csm.card1Desc, color: 'bg-black', textColor: 'text-sunny-yellow' },
+    { icon: Code2, title: t.csm.card2Title, description: t.csm.card2Desc, color: 'bg-hot-pink', textColor: 'text-white' },
+    { icon: MessageCircle, title: t.csm.card3Title, description: t.csm.card3Desc, color: 'bg-electric-blue', textColor: 'text-black' },
+    { icon: Crown, title: t.csm.card4Title, description: t.csm.card4Desc, color: 'bg-vibrant-green', textColor: 'text-black' },
+    { icon: BarChart2, title: t.csm.card5Title, description: t.csm.card5Desc, color: 'bg-black', textColor: 'text-white' },
+    { icon: TrendingUp, title: t.csm.card6Title, description: t.csm.card6Desc, color: 'bg-hot-pink', textColor: 'text-white' },
   ]
 
   return (
@@ -30,15 +30,15 @@ export function VibrantFeatures() {
           className="text-center mb-20"
         >
           <span className="inline-block px-4 py-2 rounded-full bg-black/10 border-2 border-black/20 text-black/70 text-sm font-medium mb-6">
-            {t.features.badge}
+            {t.csm.featBadge}
           </span>
           <h2 className="text-5xl md:text-7xl font-black text-black mb-6">
-            {t.features.headingLine1}
+            {t.csm.featHeading1}
             <br />
-            <span className="text-hot-pink">{t.features.headingLine2}</span>
+            <span className="text-hot-pink">{t.csm.featHeading2}</span>
           </h2>
           <p className="text-xl text-black/60 max-w-2xl mx-auto">
-            {t.features.subtitle}
+            {t.csm.featSubtitle}
           </p>
         </motion.div>
 

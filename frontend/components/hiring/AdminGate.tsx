@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Lock, Eye, EyeOff } from 'lucide-react'
+import { useLanguage } from '@/lib/i18n/context'
 
 interface AdminGateProps {
   onUnlock: (adminKey: string) => void
@@ -11,6 +12,7 @@ interface AdminGateProps {
 const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_HIRING_ADMIN_KEY || 'hiring-admin-2025'
 
 export function AdminGate({ onUnlock }: AdminGateProps) {
+  const { t } = useLanguage()
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState(false)
@@ -47,8 +49,8 @@ export function AdminGate({ onUnlock }: AdminGateProps) {
         </div>
 
         <div className="text-center">
-          <h1 className="text-2xl font-black text-white">Admin Access</h1>
-          <p className="text-white/40 text-sm mt-1">Hiring Progress Dashboard</p>
+          <h1 className="text-2xl font-black text-white">{t.adminGate.title}</h1>
+          <p className="text-white/40 text-sm mt-1">{t.adminGate.subtitle}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4">
@@ -57,7 +59,7 @@ export function AdminGate({ onUnlock }: AdminGateProps) {
               type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={e => setPassword(e.target.value)}
-              placeholder="Enter admin password"
+              placeholder={t.adminGate.placeholder}
               autoFocus
               className={`w-full bg-white/5 border rounded-xl px-4 py-3 text-white placeholder-white/30 outline-none transition-all pr-12 ${
                 error
@@ -75,14 +77,14 @@ export function AdminGate({ onUnlock }: AdminGateProps) {
           </div>
 
           {error && (
-            <p className="text-red-400 text-sm text-center">Incorrect password. Try again.</p>
+            <p className="text-red-400 text-sm text-center">{t.adminGate.errorText}</p>
           )}
 
           <button
             type="submit"
             className="w-full bg-lime text-black font-bold py-3 rounded-xl hover:bg-lime/80 transition-colors"
           >
-            Unlock Admin
+            {t.adminGate.unlockButton}
           </button>
         </form>
 
@@ -90,7 +92,7 @@ export function AdminGate({ onUnlock }: AdminGateProps) {
           href="/hiring-progress"
           className="text-white/30 hover:text-white/50 text-xs transition-colors"
         >
-          ← Back to Dashboard
+          {t.adminGate.backLink}
         </a>
       </motion.div>
     </div>

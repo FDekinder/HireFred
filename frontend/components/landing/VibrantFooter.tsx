@@ -3,8 +3,10 @@
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Heart, Linkedin, Mail } from 'lucide-react'
+import { useLanguage } from '@/lib/i18n/context'
 
 export function VibrantFooter({ company }: { company: string }) {
+  const { t } = useLanguage()
   return (
     <footer className="py-12 px-6 border-t-4 border-black">
       <div className="max-w-7xl mx-auto">
@@ -23,16 +25,16 @@ export function VibrantFooter({ company }: { company: string }) {
           {/* Links */}
           <div className="flex items-center gap-8">
             <a href="#features" className="text-black/60 hover:text-hot-pink transition-colors font-medium">
-              Skills
+              {t.footer.skills}
             </a>
             <a href="#how-it-works" className="text-black/60 hover:text-hot-pink transition-colors font-medium">
-              Experience
+              {t.footer.experience}
             </a>
             <a href="mailto:frederick.de.kinder@gmail.com" className="text-black/60 hover:text-hot-pink transition-colors font-medium">
-              Contact
+              {t.footer.contact}
             </a>
             <Link href="/hiring-progress" className="text-black/60 hover:text-hot-pink transition-colors font-medium">
-              Job Hunt
+              {t.footer.jobHunt}
             </Link>
           </div>
 
@@ -59,7 +61,7 @@ export function VibrantFooter({ company }: { company: string }) {
               </motion.a>
             </div>
             <p className="text-black/50 text-sm">
-              Made with ☺ for {company}
+              {t.footer.madeWith} {company}
             </p>
           </div>
         </div>

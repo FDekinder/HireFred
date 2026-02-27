@@ -2,39 +2,72 @@
 
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
+import { useLanguage } from '@/lib/i18n/context'
 
-function getSteps(company: string) {
-  return [
-    {
-      number: '01',
-      title: 'Big Data Dev',
-      description: 'Jan 2022 - Dec 2022 @ Bell Canada. Analyzed 10M+ records, built AI chatbot with OpenAI, cut query times by 50%. Data nerd phase unlocked.',
-      color: 'text-hot-pink',
-      borderColor: 'border-black',
-      bgColor: 'bg-black',
-    },
-    {
-      number: '02',
-      title: 'Full Stack Dev',
-      description: 'Jan 2023 - Nov 2025 @ Bell Canada. 80+ features, 1,000+ daily users, zero incidents. Built real-time collab systems. Became a PR review machine.',
-      color: 'text-sunny-yellow',
-      borderColor: 'border-black',
-      bgColor: 'bg-black',
-    },
-    {
-      number: '03',
-      title: `${company}?`,
-      description: `Feb 2025 - ??? Your next awesome hire! Ready to build React/Node apps, review PRs, mentor devs, and make your Slack channels funnier. 🚀`,
-      color: 'text-electric-blue',
-      borderColor: 'border-black',
-      bgColor: 'bg-black',
-    },
-  ]
-}
+type CareerMode = 'dev' | 'csm'
 
-export function VibrantHowItWorks({ company }: { company: string }) {
+export function VibrantHowItWorks({ company, mode = 'dev' }: { company: string; mode?: CareerMode }) {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
+  const { t } = useLanguage()
+
+  const steps = mode === 'csm'
+    ? [
+        {
+          number: '01',
+          title: t.csm.howStep1Title,
+          description: t.csm.howStep1Desc,
+          color: 'text-hot-pink',
+          borderColor: 'border-black',
+          bgColor: 'bg-black',
+        },
+        {
+          number: '02',
+          title: t.csm.howStep2Title,
+          description: t.csm.howStep2Desc,
+          color: 'text-sunny-yellow',
+          borderColor: 'border-black',
+          bgColor: 'bg-black',
+        },
+        {
+          number: '03',
+          title: t.csm.howStep3Title.replace('{company}', company),
+          description: t.csm.howStep3Desc.replace('{company}', company),
+          color: 'text-electric-blue',
+          borderColor: 'border-black',
+          bgColor: 'bg-black',
+        },
+      ]
+    : [
+        {
+          number: '01',
+          title: t.howItWorks.step1Title,
+          description: t.howItWorks.step1Desc,
+          color: 'text-hot-pink',
+          borderColor: 'border-black',
+          bgColor: 'bg-black',
+        },
+        {
+          number: '02',
+          title: t.howItWorks.step2Title,
+          description: t.howItWorks.step2Desc,
+          color: 'text-sunny-yellow',
+          borderColor: 'border-black',
+          bgColor: 'bg-black',
+        },
+        {
+          number: '03',
+          title: t.howItWorks.step3Title.replace('{company}', company),
+          description: t.howItWorks.step3Desc,
+          color: 'text-electric-blue',
+          borderColor: 'border-black',
+          bgColor: 'bg-black',
+        },
+      ]
+
+  const badge = mode === 'csm' ? t.csm.howBadge : t.howItWorks.badge
+  const headingLine1 = mode === 'csm' ? t.csm.howHeading1 : t.howItWorks.headingLine1
+  const headingLine2 = mode === 'csm' ? t.csm.howHeading2 : t.howItWorks.headingLine2
 
   return (
     <section id="how-it-works" className="py-32 px-6 bg-black/5" ref={ref}>
@@ -47,18 +80,18 @@ export function VibrantHowItWorks({ company }: { company: string }) {
           className="text-center mb-20"
         >
           <span className="inline-block px-4 py-2 rounded-full bg-black/10 border-2 border-black/20 text-black/70 text-sm font-medium mb-6">
-            My Journey
+            {badge}
           </span>
           <h2 className="text-5xl md:text-7xl font-black text-black mb-6">
-            experience
+            {headingLine1}
             <br />
-            <span className="text-hot-pink">that delivers</span>
+            <span className="text-hot-pink">{headingLine2}</span>
           </h2>
         </motion.div>
 
         {/* Steps */}
         <div className="grid md:grid-cols-3 gap-8 md:gap-4">
-          {getSteps(company).map((step, index) => (
+          {steps.map((step, index) => (
             <motion.div
               key={step.number}
               initial={{ opacity: 0, y: 30 }}
@@ -67,7 +100,7 @@ export function VibrantHowItWorks({ company }: { company: string }) {
               className="relative"
             >
               {/* Connector line */}
-              {index < getSteps(company).length - 1 && (
+              {index < steps.length - 1 && (
                 <div className="hidden md:block absolute top-16 left-1/2 w-full h-px bg-gradient-to-r from-black/30 to-transparent" />
               )}
 

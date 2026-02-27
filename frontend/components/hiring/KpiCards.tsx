@@ -4,16 +4,19 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { Send, MessageSquare, TrendingUp, Users, Trophy } from 'lucide-react'
 import { DashboardStats } from '@/lib/api'
-
-const CARDS: { key: string; label: string; icon: React.ElementType; color: string; border: string; suffix?: string }[] = [
-  { key: 'total_sent', label: 'Resumes Sent', icon: Send, color: 'text-lime', border: 'border-lime/20' },
-  { key: 'total_responses', label: 'Recruiter Responses', icon: MessageSquare, color: 'text-electric-blue', border: 'border-electric-blue/20' },
-  { key: 'response_rate', label: 'Response Rate', icon: TrendingUp, color: 'text-hot-pink', border: 'border-hot-pink/20', suffix: '%' },
-  { key: 'active_interviews', label: 'Active Interviews', icon: Users, color: 'text-sunny-yellow', border: 'border-sunny-yellow/20' },
-  { key: 'offers_received', label: 'Offers Received', icon: Trophy, color: 'text-vibrant-green', border: 'border-vibrant-green/20' },
-]
+import { useLanguage } from '@/lib/i18n/context'
 
 export function KpiCards({ stats }: { stats: DashboardStats }) {
+  const { t } = useLanguage()
+
+  const CARDS: { key: string; label: string; icon: React.ElementType; color: string; border: string; suffix?: string }[] = [
+    { key: 'total_sent', label: t.kpi.resumesSent, icon: Send, color: 'text-lime', border: 'border-lime/20' },
+    { key: 'total_responses', label: t.kpi.recruiterResponses, icon: MessageSquare, color: 'text-electric-blue', border: 'border-electric-blue/20' },
+    { key: 'response_rate', label: t.kpi.responseRate, icon: TrendingUp, color: 'text-hot-pink', border: 'border-hot-pink/20', suffix: '%' },
+    { key: 'active_interviews', label: t.kpi.activeInterviews, icon: Users, color: 'text-sunny-yellow', border: 'border-sunny-yellow/20' },
+    { key: 'offers_received', label: t.kpi.offersReceived, icon: Trophy, color: 'text-vibrant-green', border: 'border-vibrant-green/20' },
+  ]
+
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
       {CARDS.map((card, i) => {

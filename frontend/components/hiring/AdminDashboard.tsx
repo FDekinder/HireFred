@@ -7,6 +7,7 @@ import { z } from 'zod'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Pencil, Trash2, Plus, X, LogOut } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { useLanguage } from '@/lib/i18n/context'
 import {
   hiringApi,
   Application,
@@ -66,6 +67,7 @@ const selectClass = 'bg-black border border-white/10 focus:border-lime/50 rounde
 // ── Applications Tab ──────────────────────────────────────────────────────────
 
 function ApplicationsTab({ adminKey }: { adminKey: string }) {
+  const { t } = useLanguage()
   const [apps, setApps] = useState<Application[]>([])
   const [editingId, setEditingId] = useState<number | null>(null)
   const [showForm, setShowForm] = useState(false)
@@ -83,17 +85,17 @@ function ApplicationsTab({ adminKey }: { adminKey: string }) {
     try {
       if (editingId !== null) {
         await hiringApi.updateApplication(editingId, data, adminKey)
-        toast.success('Application updated!')
+        toast.success(t.adminDashboard.toastAppUpdated)
       } else {
         await hiringApi.createApplication(data as ApplicationCreate, adminKey)
-        toast.success('Application added!')
+        toast.success(t.adminDashboard.toastAppAdded)
       }
       reset({ job_type: 'fulltime', status: 'applied' })
       setEditingId(null)
       setShowForm(false)
       load()
     } catch {
-      toast.error('Failed to save application')
+      toast.error(t.adminDashboard.toastAppSaveFail)
     }
   }
 
@@ -109,13 +111,13 @@ function ApplicationsTab({ adminKey }: { adminKey: string }) {
   }
 
   const handleDelete = async (id: number) => {
-    if (!confirm('Delete this application?')) return
+    if (!confirm(t.adminDashboard.deleteApplication)) return
     try {
       await hiringApi.deleteApplication(id, adminKey)
-      toast.success('Deleted')
+      toast.success(t.adminDashboard.toastAppDeleted)
       load()
     } catch {
-      toast.error('Failed to delete')
+      toast.error(t.adminDashboard.toastAppDeleteFail)
     }
   }
 
@@ -142,7 +144,7 @@ function ApplicationsTab({ adminKey }: { adminKey: string }) {
           onClick={() => setShowForm(true)}
           className="flex items-center gap-2 bg-lime text-black font-bold px-5 py-2.5 rounded-xl hover:bg-lime/80 transition-colors text-sm"
         >
-          <Plus className="w-4 h-4" /> Add Application
+          <Plus className="w-4 h-4" /> {t.adminDashboard.addApplication}
         </button>
       )}
 
@@ -157,48 +159,48 @@ function ApplicationsTab({ adminKey }: { adminKey: string }) {
             className="glass-card p-6 space-y-4 border border-lime/20"
           >
             <div className="flex items-center justify-between mb-2">
-              <h4 className="font-bold text-white">{editingId !== null ? 'Edit' : 'Add'} Application</h4>
+              <h4 className="font-bold text-white">{editingId !== null ? t.adminDashboard.saveChanges : t.adminDashboard.addApplication}</h4>
               <button type="button" onClick={handleCancel} className="text-white/40 hover:text-white">
                 <X className="w-4 h-4" />
               </button>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Field label="Company" error={errors.company?.message}>
+              <Field label={t.adminDashboard.fieldCompany} error={errors.company?.message}>
                 <input {...register('company')} className={inputClass} placeholder="e.g. Acme Corp" />
               </Field>
-              <Field label="Role" error={errors.role?.message}>
+              <Field label={t.adminDashboard.fieldRole} error={errors.role?.message}>
                 <input {...register('role')} className={inputClass} placeholder="e.g. Senior Dev" />
               </Field>
-              <Field label="Date Sent" error={errors.date_sent?.message}>
+              <Field label={t.adminDashboard.fieldDateSent} error={errors.date_sent?.message}>
                 <input {...register('date_sent')} type="date" className={inputClass} />
               </Field>
-              <Field label="Job Type" error={errors.job_type?.message}>
+              <Field label={t.adminDashboard.fieldJobType} error={errors.job_type?.message}>
                 <select {...register('job_type')} className={selectClass}>
-                  <option value="fulltime">Full-Time</option>
-                  <option value="contract">Contract</option>
-                  <option value="freelance">Freelance</option>
+                  <option value="fulltime">{t.adminDashboard.jobTypeFulltime}</option>
+                  <option value="contract">{t.adminDashboard.jobTypeContract}</option>
+                  <option value="freelance">{t.adminDashboard.jobTypeFreelance}</option>
                 </select>
               </Field>
-              <Field label="Status" error={errors.status?.message}>
+              <Field label={t.adminDashboard.fieldStatus} error={errors.status?.message}>
                 <select {...register('status')} className={selectClass}>
-                  <option value="applied">Applied</option>
-                  <option value="response">Recruiter Response</option>
-                  <option value="interview">Interview</option>
-                  <option value="offer">Offer</option>
-                  <option value="rejected">Rejected</option>
-                  <option value="no_response">No Response</option>
+                  <option value="applied">{t.adminDashboard.statusApplied}</option>
+                  <option value="response">{t.adminDashboard.statusResponse}</option>
+                  <option value="interview">{t.adminDashboard.statusInterview}</option>
+                  <option value="offer">{t.adminDashboard.statusOffer}</option>
+                  <option value="rejected">{t.adminDashboard.statusRejected}</option>
+                  <option value="no_response">{t.adminDashboard.statusNoResponse}</option>
                 </select>
               </Field>
-              <Field label="Notes" error={errors.notes?.message}>
+              <Field label={t.adminDashboard.fieldNotes} error={errors.notes?.message}>
                 <input {...register('notes')} className={inputClass} placeholder="Optional notes" />
               </Field>
             </div>
             <div className="flex gap-3 pt-2">
               <button type="submit" className="bg-lime text-black font-bold px-5 py-2 rounded-xl hover:bg-lime/80 transition-colors text-sm">
-                {editingId !== null ? 'Save Changes' : 'Add Application'}
+                {editingId !== null ? t.adminDashboard.saveChanges : t.adminDashboard.addApplication}
               </button>
               <button type="button" onClick={handleCancel} className="text-white/50 hover:text-white text-sm transition-colors">
-                Cancel
+                {t.adminDashboard.cancel}
               </button>
             </div>
           </motion.form>
@@ -208,7 +210,7 @@ function ApplicationsTab({ adminKey }: { adminKey: string }) {
       {/* List */}
       <div className="space-y-2">
         {apps.length === 0 && (
-          <p className="text-white/30 text-sm text-center py-8">No applications yet. Add one above.</p>
+          <p className="text-white/30 text-sm text-center py-8">{t.adminDashboard.noApplications}</p>
         )}
         {apps.map(app => (
           <div key={app.id} className="glass-card px-5 py-4 flex items-center justify-between gap-4">
@@ -239,6 +241,7 @@ function ApplicationsTab({ adminKey }: { adminKey: string }) {
 // ── Contacts Tab ──────────────────────────────────────────────────────────────
 
 function ContactsTab({ adminKey }: { adminKey: string }) {
+  const { t } = useLanguage()
   const [contacts, setContacts] = useState<RecruiterContact[]>([])
   const [editingId, setEditingId] = useState<number | null>(null)
   const [showForm, setShowForm] = useState(false)
@@ -255,17 +258,17 @@ function ContactsTab({ adminKey }: { adminKey: string }) {
     try {
       if (editingId !== null) {
         await hiringApi.updateContact(editingId, data, adminKey)
-        toast.success('Contact updated!')
+        toast.success(t.adminDashboard.toastContactUpdated)
       } else {
         await hiringApi.createContact(data as RecruiterContactCreate, adminKey)
-        toast.success('Contact added!')
+        toast.success(t.adminDashboard.toastContactAdded)
       }
       reset({ status: 'active' })
       setEditingId(null)
       setShowForm(false)
       load()
     } catch {
-      toast.error('Failed to save contact')
+      toast.error(t.adminDashboard.toastContactSaveFail)
     }
   }
 
@@ -281,13 +284,13 @@ function ContactsTab({ adminKey }: { adminKey: string }) {
   }
 
   const handleDelete = async (id: number) => {
-    if (!confirm('Delete this contact?')) return
+    if (!confirm(t.adminDashboard.deleteContact)) return
     try {
       await hiringApi.deleteContact(id, adminKey)
-      toast.success('Deleted')
+      toast.success(t.adminDashboard.toastContactDeleted)
       load()
     } catch {
-      toast.error('Failed to delete')
+      toast.error(t.adminDashboard.toastContactDeleteFail)
     }
   }
 
@@ -304,7 +307,7 @@ function ContactsTab({ adminKey }: { adminKey: string }) {
           onClick={() => setShowForm(true)}
           className="flex items-center gap-2 bg-lime text-black font-bold px-5 py-2.5 rounded-xl hover:bg-lime/80 transition-colors text-sm"
         >
-          <Plus className="w-4 h-4" /> Add Contact
+          <Plus className="w-4 h-4" /> {t.adminDashboard.addContact}
         </button>
       )}
 
@@ -318,37 +321,37 @@ function ContactsTab({ adminKey }: { adminKey: string }) {
             className="glass-card p-6 space-y-4 border border-lime/20"
           >
             <div className="flex items-center justify-between mb-2">
-              <h4 className="font-bold text-white">{editingId !== null ? 'Edit' : 'Add'} Contact</h4>
+              <h4 className="font-bold text-white">{editingId !== null ? t.adminDashboard.saveChanges : t.adminDashboard.addContact}</h4>
               <button type="button" onClick={handleCancel} className="text-white/40 hover:text-white">
                 <X className="w-4 h-4" />
               </button>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Field label="Name" error={errors.name?.message}>
+              <Field label={t.adminDashboard.fieldName} error={errors.name?.message}>
                 <input {...register('name')} className={inputClass} placeholder="Jane Smith" />
               </Field>
-              <Field label="Company" error={errors.company?.message}>
+              <Field label={t.adminDashboard.fieldCompany} error={errors.company?.message}>
                 <input {...register('company')} className={inputClass} placeholder="Acme Corp" />
               </Field>
-              <Field label="Their Role" error={errors.role?.message}>
+              <Field label={t.adminDashboard.fieldTheirRole} error={errors.role?.message}>
                 <input {...register('role')} className={inputClass} placeholder="Technical Recruiter" />
               </Field>
-              <Field label="Last Contact Date" error={errors.last_contact_date?.message}>
+              <Field label={t.adminDashboard.fieldLastContactDate} error={errors.last_contact_date?.message}>
                 <input {...register('last_contact_date')} type="date" className={inputClass} />
               </Field>
-              <Field label="Status" error={errors.status?.message}>
+              <Field label={t.adminDashboard.fieldStatus} error={errors.status?.message}>
                 <input {...register('status')} className={inputClass} placeholder="active / responded / closed" />
               </Field>
-              <Field label="Note" error={errors.note?.message}>
+              <Field label={t.adminDashboard.fieldNote} error={errors.note?.message}>
                 <input {...register('note')} className={inputClass} placeholder="Phone screen scheduled..." />
               </Field>
             </div>
             <div className="flex gap-3 pt-2">
               <button type="submit" className="bg-lime text-black font-bold px-5 py-2 rounded-xl hover:bg-lime/80 transition-colors text-sm">
-                {editingId !== null ? 'Save Changes' : 'Add Contact'}
+                {editingId !== null ? t.adminDashboard.saveChanges : t.adminDashboard.addContact}
               </button>
               <button type="button" onClick={handleCancel} className="text-white/50 hover:text-white text-sm transition-colors">
-                Cancel
+                {t.adminDashboard.cancel}
               </button>
             </div>
           </motion.form>
@@ -357,7 +360,7 @@ function ContactsTab({ adminKey }: { adminKey: string }) {
 
       <div className="space-y-2">
         {contacts.length === 0 && (
-          <p className="text-white/30 text-sm text-center py-8">No contacts yet.</p>
+          <p className="text-white/30 text-sm text-center py-8">{t.adminDashboard.noContacts}</p>
         )}
         {contacts.map(c => (
           <div key={c.id} className="glass-card px-5 py-4 flex items-center justify-between gap-4">
@@ -384,6 +387,7 @@ function ContactsTab({ adminKey }: { adminKey: string }) {
 // ── Settings Tab ──────────────────────────────────────────────────────────────
 
 function SettingsTab({ adminKey }: { adminKey: string }) {
+  const { t } = useLanguage()
   const [banner, setBanner] = useState<HiringStatusBanner | null>(null)
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm<BannerForm>({
@@ -404,23 +408,23 @@ function SettingsTab({ adminKey }: { adminKey: string }) {
     try {
       const updated = await hiringApi.updateBanner(data, adminKey)
       setBanner(updated)
-      toast.success('Status banner updated!')
+      toast.success(t.adminDashboard.toastBannerUpdated)
     } catch {
-      toast.error('Failed to update banner')
+      toast.error(t.adminDashboard.toastBannerFail)
     }
   }
 
   return (
     <div className="max-w-lg space-y-6">
       <div className="glass-card p-6 border border-lime/10">
-        <h4 className="font-bold text-white mb-4">Public Status Banner</h4>
+        <h4 className="font-bold text-white mb-4">{t.adminDashboard.settingsBannerTitle}</h4>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <Field label="Banner Message" error={errors.message?.message}>
+          <Field label={t.adminDashboard.settingsBannerLabel} error={errors.message?.message}>
             <textarea
               {...register('message')}
               rows={3}
               className={`${inputClass} resize-none`}
-              placeholder="Actively Looking — Open to Offers — Available Now"
+              placeholder={t.adminDashboard.settingsBannerPlaceholder}
             />
           </Field>
           <label className="flex items-center gap-3 cursor-pointer">
@@ -429,10 +433,10 @@ function SettingsTab({ adminKey }: { adminKey: string }) {
               type="checkbox"
               className="w-4 h-4 accent-lime"
             />
-            <span className="text-white/60 text-sm">Show banner on public dashboard</span>
+            <span className="text-white/60 text-sm">{t.adminDashboard.settingsBannerCheckbox}</span>
           </label>
           <button type="submit" className="bg-lime text-black font-bold px-5 py-2 rounded-xl hover:bg-lime/80 transition-colors text-sm">
-            Save Banner
+            {t.adminDashboard.settingsSaveButton}
           </button>
         </form>
       </div>
@@ -443,12 +447,13 @@ function SettingsTab({ adminKey }: { adminKey: string }) {
 // ── Main AdminDashboard ───────────────────────────────────────────────────────
 
 export function AdminDashboard({ adminKey, onLogout }: { adminKey: string; onLogout: () => void }) {
+  const { t } = useLanguage()
   const [activeTab, setActiveTab] = useState<Tab>('applications')
 
   const TABS: { key: Tab; label: string }[] = [
-    { key: 'applications', label: 'Applications' },
-    { key: 'contacts', label: 'Contacts' },
-    { key: 'settings', label: 'Settings' },
+    { key: 'applications', label: t.adminDashboard.tabApplications },
+    { key: 'contacts', label: t.adminDashboard.tabContacts },
+    { key: 'settings', label: t.adminDashboard.tabSettings },
   ]
 
   return (
@@ -459,15 +464,15 @@ export function AdminDashboard({ adminKey, onLogout }: { adminKey: string; onLog
       <header className="relative z-10 px-6 py-6 border-b border-white/10">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-black text-lime">Admin — Hiring Dashboard</h1>
-            <p className="text-white/30 text-xs mt-0.5">Manage your job search data</p>
+            <h1 className="text-2xl font-black text-lime">{t.adminDashboard.title}</h1>
+            <p className="text-white/30 text-xs mt-0.5">{t.adminDashboard.subtitle}</p>
           </div>
           <div className="flex items-center gap-4">
             <a
               href="/hiring-progress"
               className="text-white/40 hover:text-white text-sm transition-colors"
             >
-              View Public Dashboard →
+              {t.adminDashboard.viewPublic}
             </a>
             <button
               onClick={onLogout}

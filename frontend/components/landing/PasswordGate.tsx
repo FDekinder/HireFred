@@ -3,12 +3,14 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Lock, ArrowRight } from 'lucide-react'
+import { useLanguage } from '@/lib/i18n/context'
 
 interface PasswordGateProps {
   onUnlock: (company: string) => void
 }
 
 export function PasswordGate({ onUnlock }: PasswordGateProps) {
+  const { t } = useLanguage()
   const [password, setPassword] = useState('')
   const [error, setError] = useState(false)
   const [shaking, setShaking] = useState(false)
@@ -56,10 +58,10 @@ export function PasswordGate({ onUnlock }: PasswordGateProps) {
 
         {/* Heading */}
         <h1 className="text-4xl md:text-5xl font-black text-black mb-3 tracking-tight">
-          psst...
+          {t.passwordGate.heading}
         </h1>
         <p className="text-lg text-black/60 font-medium mb-10">
-          enter the secret code
+          {t.passwordGate.subtitle}
         </p>
 
         {/* Form */}
@@ -72,7 +74,7 @@ export function PasswordGate({ onUnlock }: PasswordGateProps) {
               type="text"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="type the password..."
+              placeholder={t.passwordGate.placeholder}
               autoFocus
               disabled={loading}
               className="w-full px-6 py-4 text-lg rounded-2xl border-4 border-black/20 focus:border-hot-pink focus:outline-none transition-colors bg-white text-black text-center font-bold placeholder:font-normal placeholder:text-black/30 disabled:opacity-60"
@@ -88,7 +90,7 @@ export function PasswordGate({ onUnlock }: PasswordGateProps) {
                 exit={{ opacity: 0, y: -10 }}
                 className="text-hot-pink font-bold mt-3"
               >
-                nice try! wrong password though 😏
+                {t.passwordGate.error}
               </motion.p>
             )}
           </AnimatePresence>
@@ -100,17 +102,17 @@ export function PasswordGate({ onUnlock }: PasswordGateProps) {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            {loading ? 'checking...' : 'Let me in!'}
+            {loading ? t.passwordGate.checkingButton : t.passwordGate.submitButton}
             <ArrowRight className="w-5 h-5" />
           </motion.button>
         </form>
 
         {/* Hint */}
         <p className="text-black/20 text-xs mt-8">
-          hint: try your company name ;)
+          {t.passwordGate.hint1}
         </p>
         <p className="text-black/20 text-xs mt-2">
-          company not listed? try "google" as default
+          {t.passwordGate.hint2}
         </p>
       </motion.div>
     </div>

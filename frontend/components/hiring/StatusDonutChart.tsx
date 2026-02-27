@@ -2,6 +2,7 @@
 
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import { ApplicationStatus, DashboardStats } from '@/lib/api'
+import { useLanguage } from '@/lib/i18n/context'
 
 const STATUS_COLORS: Record<string, string> = {
   applied: '#CDFF00',
@@ -10,15 +11,6 @@ const STATUS_COLORS: Record<string, string> = {
   offer: '#00FF66',
   rejected: '#FF6B00',
   no_response: 'rgba(255,255,255,0.2)',
-}
-
-const STATUS_LABELS: Record<string, string> = {
-  applied: 'Applied',
-  response: 'Response',
-  interview: 'Interview',
-  offer: 'Offer',
-  rejected: 'Rejected',
-  no_response: 'No Response',
 }
 
 const TOOLTIP_STYLE = {
@@ -30,6 +22,17 @@ const TOOLTIP_STYLE = {
 }
 
 export function StatusDonutChart({ data }: { data: DashboardStats['status_breakdown'] }) {
+  const { t } = useLanguage()
+
+  const STATUS_LABELS: Record<string, string> = {
+    applied: t.charts.statusApplied,
+    response: t.charts.statusResponse,
+    interview: t.charts.statusInterview,
+    offer: t.charts.statusOffer,
+    rejected: t.charts.statusRejected,
+    no_response: t.charts.statusNoResponse,
+  }
+
   const chartData = Object.entries(data)
     .map(([key, value]) => ({
       name: STATUS_LABELS[key] ?? key,
@@ -41,15 +44,15 @@ export function StatusDonutChart({ data }: { data: DashboardStats['status_breakd
   if (chartData.length === 0) {
     return (
       <div className="glass-card p-6 flex flex-col items-center justify-center h-full min-h-[280px]">
-        <h3 className="text-lg font-bold mb-2 text-white">Application Status Breakdown</h3>
-        <p className="text-white/30 text-sm">No data yet</p>
+        <h3 className="text-lg font-bold mb-2 text-white">{t.charts.statusDonutTitle}</h3>
+        <p className="text-white/30 text-sm">{t.charts.statusDonutEmpty}</p>
       </div>
     )
   }
 
   return (
     <div className="glass-card p-6">
-      <h3 className="text-lg font-bold mb-6 text-white">Application Status Breakdown</h3>
+      <h3 className="text-lg font-bold mb-6 text-white">{t.charts.statusDonutTitle}</h3>
       <ResponsiveContainer width="100%" height={220}>
         <PieChart>
           <Pie

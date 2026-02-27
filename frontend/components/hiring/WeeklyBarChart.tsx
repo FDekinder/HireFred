@@ -2,6 +2,7 @@
 
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts'
 import { WeeklyDataPoint } from '@/lib/api'
+import { useLanguage } from '@/lib/i18n/context'
 
 const TOOLTIP_STYLE = {
   background: 'rgba(0,0,0,0.85)',
@@ -12,11 +13,12 @@ const TOOLTIP_STYLE = {
 }
 
 export function WeeklyBarChart({ data }: { data: WeeklyDataPoint[] }) {
+  const { t } = useLanguage()
   const maxVal = Math.max(...data.map(d => d.count), 1)
 
   return (
     <div className="glass-card p-6">
-      <h3 className="text-lg font-bold mb-6 text-white">Resumes Sent per Week</h3>
+      <h3 className="text-lg font-bold mb-6 text-white">{t.charts.weeklyBarTitle}</h3>
       <ResponsiveContainer width="100%" height={220}>
         <BarChart data={data} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
           <XAxis
