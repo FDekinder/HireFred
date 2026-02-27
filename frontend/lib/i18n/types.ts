@@ -214,6 +214,28 @@ export interface Translations {
     howStep2Desc: string
     howStep3Title: string
     howStep3Desc: string
+    testimonialsBadge: string
+    testimonialsHeading1: string
+    testimonialsHeading2: string
+    testimonialsSubtitle: string
+    testimonialsQuote1: string
+    testimonialsAuthor1: string
+    testimonialsRole1: string
+    testimonialsQuote2: string
+    testimonialsAuthor2: string
+    testimonialsRole2: string
+    testimonialsQuote3: string
+    testimonialsAuthor3: string
+    testimonialsRole3: string
+    ctaBadge: string
+    ctaHeading1: string
+    ctaHeading2: string
+    ctaSubtitle: string
+    ctaButton: string
+    contactBadge: string
+    contactHeading1: string
+    contactHeading2: string
+    contactSubtitle: string
   }
   adminDashboard: {
     title: string

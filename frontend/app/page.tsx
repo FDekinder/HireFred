@@ -39,9 +39,9 @@ export default function HomePage() {
       {careerMode === 'dev' ? <VibrantFeatures /> : <CsmFeatures />}
       {careerMode === 'dev' ? <SkillBars /> : <CsmTimeline />}
       <VibrantHowItWorks company={company} mode={careerMode} />
-      <Testimonials />
-      <ContactForm company={company} />
-      <VibrantCTA />
+      <Testimonials mode={careerMode} />
+      <ContactForm company={company} mode={careerMode} />
+      <VibrantCTA mode={careerMode} />
       <VibrantFooter company={company} />
       <ViewCounter />
     </main>

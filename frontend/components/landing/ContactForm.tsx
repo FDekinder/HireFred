@@ -6,7 +6,9 @@ import { Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
 import { portfolioApi } from '@/lib/api'
 import { useLanguage } from '@/lib/i18n/context'
 
-export function ContactForm({ company }: { company: string }) {
+type CareerMode = 'dev' | 'csm'
+
+export function ContactForm({ company, mode = 'dev' }: { company: string; mode?: CareerMode }) {
   const { t } = useLanguage()
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
@@ -45,19 +47,21 @@ export function ContactForm({ company }: { company: string }) {
         >
           <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-black/10 border-2 border-black/20 text-black/70 text-sm font-medium mb-6">
             <span className="w-2 h-2 rounded-full bg-hot-pink animate-pulse" />
-            {t.contact.badge}
+            {mode === 'csm' ? t.csm.contactBadge : t.contact.badge}
           </span>
           <h2 className="text-4xl md:text-5xl font-black text-black mb-4">
-            {t.contact.headingLine1}
+            {mode === 'csm' ? t.csm.contactHeading1 : t.contact.headingLine1}
             <br />
-            <span className="text-hot-pink">{t.contact.headingLine2}</span>
+            <span className="text-hot-pink">{mode === 'csm' ? t.csm.contactHeading2 : t.contact.headingLine2}</span>
           </h2>
           <p className="text-black/60">
-            {t.contact.subtitle}
+            {mode === 'csm' ? t.csm.contactSubtitle : t.contact.subtitle}
           </p>
-          <p className="text-black/40 text-sm mt-2 italic">
-            {t.contact.note}
-          </p>
+          {mode === 'dev' && (
+            <p className="text-black/40 text-sm mt-2 italic">
+              {t.contact.note}
+            </p>
+          )}
         </motion.div>
 
         <motion.div

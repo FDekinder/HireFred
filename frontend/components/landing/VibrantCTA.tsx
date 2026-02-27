@@ -5,10 +5,18 @@ import { useRef } from 'react'
 import { ArrowRight, Sparkles, Mail, Phone, MapPin } from 'lucide-react'
 import { useLanguage } from '@/lib/i18n/context'
 
-export function VibrantCTA() {
+type CareerMode = 'dev' | 'csm'
+
+export function VibrantCTA({ mode = 'dev' }: { mode?: CareerMode }) {
   const { t } = useLanguage()
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
+
+  const badge = mode === 'csm' ? t.csm.ctaBadge : t.cta.badge
+  const heading1 = mode === 'csm' ? t.csm.ctaHeading1 : t.cta.headingLine1
+  const heading2 = mode === 'csm' ? t.csm.ctaHeading2 : t.cta.headingLine2
+  const subtitle = mode === 'csm' ? t.csm.ctaSubtitle : t.cta.subtitle
+  const primaryButton = mode === 'csm' ? t.csm.ctaButton : t.cta.hireMeButton
 
   return (
     <section className="py-32 px-6" ref={ref}>
@@ -42,7 +50,7 @@ export function VibrantCTA() {
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-sunny-yellow/20 text-sunny-yellow text-sm font-semibold mb-8"
             >
               <Sparkles className="w-4 h-4" />
-              {t.cta.badge}
+              {badge}
             </motion.div>
 
             <motion.h2
@@ -51,9 +59,9 @@ export function VibrantCTA() {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="text-4xl md:text-6xl lg:text-7xl font-black text-white mb-6 leading-tight"
             >
-              {t.cta.headingLine1}
+              {heading1}
               <br />
-              <span className="text-sunny-yellow">{t.cta.headingLine2}</span>
+              <span className="text-sunny-yellow">{heading2}</span>
             </motion.h2>
 
             <motion.p
@@ -62,7 +70,7 @@ export function VibrantCTA() {
               transition={{ duration: 0.5, delay: 0.4 }}
               className="text-xl text-white/60 mb-10 max-w-xl mx-auto"
             >
-              {t.cta.subtitle}
+              {subtitle}
             </motion.p>
 
             {/* Contact Info */}
@@ -98,7 +106,7 @@ export function VibrantCTA() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  {t.cta.hireMeButton}
+                  {primaryButton}
                   <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
                 </motion.button>
               </a>

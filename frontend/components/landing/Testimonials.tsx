@@ -6,7 +6,9 @@ import { Quote, RefreshCw, Loader2 } from 'lucide-react'
 import { portfolioApi, Testimonial } from '@/lib/api'
 import { useLanguage } from '@/lib/i18n/context'
 
-export function Testimonials() {
+type CareerMode = 'dev' | 'csm'
+
+export function Testimonials({ mode = 'dev' }: { mode?: CareerMode }) {
   const { t } = useLanguage()
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
@@ -16,8 +18,9 @@ export function Testimonials() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    loadTestimonials()
-  }, [])
+    if (mode === 'dev') loadTestimonials()
+    else setLoading(false)
+  }, [mode])
 
   useEffect(() => {
     if (testimonials.length > 1) {
@@ -41,7 +44,19 @@ export function Testimonials() {
     }
   }
 
-  const currentTestimonial = testimonials[currentIndex]
+  const csmTestimonials = [
+    { id: 1, quote: t.csm.testimonialsQuote1, author: t.csm.testimonialsAuthor1, role: t.csm.testimonialsRole1 },
+    { id: 2, quote: t.csm.testimonialsQuote2, author: t.csm.testimonialsAuthor2, role: t.csm.testimonialsRole2 },
+    { id: 3, quote: t.csm.testimonialsQuote3, author: t.csm.testimonialsAuthor3, role: t.csm.testimonialsRole3 },
+  ]
+
+  const activeTestimonials = mode === 'csm' ? csmTestimonials : testimonials
+  const currentTestimonial = activeTestimonials[currentIndex]
+
+  const badge = mode === 'csm' ? t.csm.testimonialsBadge : t.testimonials.badge
+  const heading1 = mode === 'csm' ? t.csm.testimonialsHeading1 : t.testimonials.headingLine1
+  const heading2 = mode === 'csm' ? t.csm.testimonialsHeading2 : t.testimonials.headingLine2
+  const subtitle = mode === 'csm' ? t.csm.testimonialsSubtitle : t.testimonials.subtitle
 
   return (
     <section className="py-24 px-6 bg-black/5" ref={ref}>
@@ -54,15 +69,15 @@ export function Testimonials() {
         >
           <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-black/10 border-2 border-black/20 text-black/70 text-sm font-medium mb-6">
             <span className="w-2 h-2 rounded-full bg-vibrant-green animate-pulse" />
-            {t.testimonials.badge}
+            {badge}
           </span>
           <h2 className="text-4xl md:text-5xl font-black text-black mb-4">
-            {t.testimonials.headingLine1}
+            {heading1}
             <br />
-            <span className="text-hot-pink">{t.testimonials.headingLine2}</span>
+            <span className="text-hot-pink">{heading2}</span>
           </h2>
           <p className="text-black/60">
-            {t.testimonials.subtitle}
+            {subtitle}
           </p>
         </motion.div>
 
@@ -106,7 +121,7 @@ export function Testimonials() {
                   <div>
                     <p className="text-sunny-yellow font-bold">{currentTestimonial.author}</p>
                     <p className="text-white/60 text-sm">
-                      {currentTestimonial.role} @ {currentTestimonial.company}
+                      {currentTestimonial.role}
                     </p>
                   </div>
                 </motion.div>
@@ -114,9 +129,9 @@ export function Testimonials() {
             ) : null}
 
             {/* Dots indicator */}
-            {testimonials.length > 1 && (
+            {activeTestimonials.length > 1 && (
               <div className="flex justify-center gap-2 mt-8">
-                {testimonials.map((_, idx) => (
+                {activeTestimonials.map((_, idx) => (
                   <button
                     key={idx}
                     onClick={() => setCurrentIndex(idx)}
@@ -129,8 +144,8 @@ export function Testimonials() {
             )}
           </div>
 
-          {/* Refresh button */}
-          {!loading && !error && (
+          {/* Refresh button — only in dev mode with API */}
+          {mode === 'dev' && !loading && !error && (
             <motion.button
               onClick={loadTestimonials}
               className="absolute -bottom-4 right-4 p-3 bg-sunny-yellow text-black rounded-full shadow-lg hover:bg-hot-pink hover:text-white transition-colors"
@@ -143,17 +158,19 @@ export function Testimonials() {
           )}
         </motion.div>
 
-        {/* API info badge */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ delay: 0.5 }}
-          className="mt-8 text-center"
-        >
-          <code className="text-xs bg-black/10 px-3 py-1 rounded-full text-black/50">
-            GET /api/portfolio/testimonials
-          </code>
-        </motion.div>
+        {/* API info badge — only in dev mode */}
+        {mode === 'dev' && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : {}}
+            transition={{ delay: 0.5 }}
+            className="mt-8 text-center"
+          >
+            <code className="text-xs bg-black/10 px-3 py-1 rounded-full text-black/50">
+              GET /api/portfolio/testimonials
+            </code>
+          </motion.div>
+        )}
       </div>
     </section>
   )
