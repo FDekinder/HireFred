@@ -1,7 +1,7 @@
 'use client'
 
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts'
-import { ApplicationStatus, DashboardStats } from '@/lib/api'
+import { DashboardStats } from '@/lib/api'
 import { useLanguage } from '@/lib/i18n/context'
 
 const STATUS_COLORS: Record<string, string> = {
@@ -16,12 +16,15 @@ const STATUS_COLORS: Record<string, string> = {
   master: '#BF5FFF',
 }
 
-const TOOLTIP_STYLE = {
-  background: 'rgba(0,0,0,0.85)',
-  border: '1px solid rgba(255,255,255,0.1)',
-  borderRadius: '8px',
-  color: '#fff',
-  fontSize: '13px',
+function CustomTooltip({ active, payload }: { active?: boolean; payload?: { name: string; value: number; payload: { color: string } }[] }) {
+  if (!active || !payload?.length) return null
+  const { name, value, payload: { color } } = payload[0]
+  return (
+    <div style={{ background: 'rgba(0,0,0,0.9)', border: `1px solid ${color}`, borderRadius: 8, padding: '8px 14px' }}>
+      <span style={{ color, fontWeight: 700, fontSize: 13 }}>{name}</span>
+      <span style={{ color: '#fff', fontSize: 13, marginLeft: 8 }}>{value}</span>
+    </div>
+  )
 }
 
 export function StatusDonutChart({ data }: { data: DashboardStats['status_breakdown'] }) {
@@ -74,7 +77,7 @@ export function StatusDonutChart({ data }: { data: DashboardStats['status_breakd
               <Cell key={i} fill={entry.color} />
             ))}
           </Pie>
-          <Tooltip contentStyle={TOOLTIP_STYLE} />
+          <Tooltip content={<CustomTooltip />} />
           <Legend
             formatter={(value) => (
               <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: '12px' }}>{value}</span>
