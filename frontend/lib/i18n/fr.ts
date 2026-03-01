@@ -257,7 +257,7 @@ export const fr: Translations = {
     colDate: "Date d'envoi",
     colStatus: 'Statut',
     colNotes: 'Notes',
-    empty: 'Aucun CV dans le catalogue pour l'instant.',
+    empty: "Aucun CV dans le catalogue pour l'instant.",
     importTab: 'Importer des CV',
     importTitle: 'Importer le catalogue de CV',
     importDesc: 'Collez le contenu de votre cv_catalog.json ci-dessous et cliquez sur Importer. Les doublons sont ignorés automatiquement.',
