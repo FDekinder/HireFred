@@ -11,6 +11,9 @@ const STATUS_COLORS: Record<string, string> = {
   offer: '#00FF66',
   rejected: '#FF6B00',
   no_response: 'rgba(255,255,255,0.2)',
+  ghosted: 'rgba(255,255,255,0.12)',
+  phone_screen: '#FFD600',
+  master: '#BF5FFF',
 }
 
 const TOOLTIP_STYLE = {
@@ -31,6 +34,9 @@ export function StatusDonutChart({ data }: { data: DashboardStats['status_breakd
     offer: t.charts.statusOffer,
     rejected: t.charts.statusRejected,
     no_response: t.charts.statusNoResponse,
+    ghosted: t.charts.statusGhosted,
+    phone_screen: t.charts.statusPhoneScreen,
+    master: t.charts.statusMaster,
   }
 
   const chartData = Object.entries(data)

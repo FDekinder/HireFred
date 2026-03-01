@@ -14,10 +14,21 @@ const TOOLTIP_STYLE = {
 
 export function CumulativeLineChart({ data }: { data: CumulativeDataPoint[] }) {
   const { t } = useLanguage()
-  // Sample down to ~20 points for readability
-  const displayData = data.length > 20
-    ? data.filter((_, i) => i % Math.ceil(data.length / 20) === 0 || i === data.length - 1)
-    : data
+
+  // Aggregate to one point per week (last cumulative total in each week)
+  const weekMap: Record<string, number> = {}
+  for (const d of data) {
+    const date = new Date(d.date)
+    const year = date.getFullYear()
+    // ISO week number
+    const jan1 = new Date(year, 0, 1)
+    const week = Math.ceil(((date.getTime() - jan1.getTime()) / 86400000 + jan1.getDay() + 1) / 7)
+    const key = `${year}-W${String(week).padStart(2, '0')}`
+    weekMap[key] = d.total
+  }
+  const displayData = Object.entries(weekMap)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([week, total]) => ({ date: week, total }))
 
   if (displayData.length === 0) {
     return (
@@ -42,7 +53,8 @@ export function CumulativeLineChart({ data }: { data: CumulativeDataPoint[] }) {
           <XAxis
             dataKey="date"
             tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 10 }}
-            tickFormatter={(d: string) => d.slice(5)}
+            tickFormatter={(d: string) => d.replace(/^\d{4}-/, '')}
+            interval={Math.ceil(displayData.length / 10) - 1}
           />
           <YAxis
             tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 11 }}
