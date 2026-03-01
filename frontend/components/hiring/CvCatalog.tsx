@@ -14,6 +14,9 @@ const STATUS_COLORS: Record<string, string> = {
   offer: 'text-vibrant-green/80 bg-vibrant-green/10 border-vibrant-green/20',
   rejected: 'text-orange/80 bg-orange/10 border-orange/20',
   no_response: 'text-white/30 bg-white/5 border-white/10',
+  ghosted: 'text-white/20 bg-white/5 border-white/5',
+  phone_screen: 'text-yellow-400/80 bg-yellow-400/10 border-yellow-400/20',
+  master: 'text-purple-400/80 bg-purple-400/10 border-purple-400/20',
 }
 
 function extractMeta(notes: string | null | undefined): { lang?: string; location?: string; notesText?: string } {
@@ -66,6 +69,9 @@ function CvMiniStats({ apps, t }: { apps: Application[]; t: ReturnType<typeof us
     offer: { label: t.charts.statusOffer, color: 'text-vibrant-green' },
     rejected: { label: t.charts.statusRejected, color: 'text-orange' },
     no_response: { label: t.charts.statusNoResponse, color: 'text-white/40' },
+    ghosted: { label: t.charts.statusGhosted, color: 'text-white/20' },
+    phone_screen: { label: t.charts.statusPhoneScreen, color: 'text-yellow-400' },
+    master: { label: t.charts.statusMaster, color: 'text-purple-400' },
   }
 
   return (
@@ -150,6 +156,9 @@ export function CvCatalog({ applications }: { applications: Application[] }) {
     { value: 'offer', label: t.charts.statusOffer },
     { value: 'rejected', label: t.charts.statusRejected },
     { value: 'no_response', label: t.charts.statusNoResponse },
+    { value: 'ghosted', label: t.charts.statusGhosted },
+    { value: 'phone_screen', label: t.charts.statusPhoneScreen },
+    { value: 'master', label: t.charts.statusMaster },
   ]
 
   if (applications.length === 0) {

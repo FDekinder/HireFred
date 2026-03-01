@@ -92,6 +92,9 @@ class ApplicationStatus(str, Enum):
     offer = "offer"
     rejected = "rejected"
     no_response = "no_response"
+    ghosted = "ghosted"
+    phone_screen = "phone_screen"
+    master = "master"
 
 class JobType(str, Enum):
     fulltime = "fulltime"

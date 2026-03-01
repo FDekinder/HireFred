@@ -141,6 +141,9 @@ export interface Translations {
     statusOffer: string
     statusRejected: string
     statusNoResponse: string
+    statusGhosted: string
+    statusPhoneScreen: string
+    statusMaster: string
     jobTypeFulltime: string
     jobTypeContract: string
     jobTypeFreelance: string

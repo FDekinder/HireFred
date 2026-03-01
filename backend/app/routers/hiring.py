@@ -211,6 +211,9 @@ def bulk_import_applications(
         "offer": "offer",
         "rejected": "rejected",
         "no_response": "no_response",
+        "ghosted": "ghosted",
+        "phone_screen": "phone_screen",
+        "master": "master",
     }
     JOB_TYPE_MAP = {
         "CSM": "fulltime",
@@ -224,7 +227,7 @@ def bulk_import_applications(
     skipped = 0
 
     for cv in cvs:
-        company = cv.get("company", "").strip()
+        company = (cv.get("company") or "").strip() or "Master CV"
         role = cv.get("role", "").strip()
         date_sent = cv.get("created_date", "").strip()
         raw_status = cv.get("status", "applied")
@@ -234,7 +237,7 @@ def bulk_import_applications(
         notes_raw = cv.get("notes", "")
         industry = cv.get("industry", "")
 
-        if not company or not role or not date_sent:
+        if not role or not date_sent:
             skipped += 1
             continue
 
