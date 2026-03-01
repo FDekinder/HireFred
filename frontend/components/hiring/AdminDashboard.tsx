@@ -47,8 +47,6 @@ type ApplicationForm = z.infer<typeof applicationSchema>
 type ContactForm = z.infer<typeof contactSchema>
 type BannerForm = z.infer<typeof bannerSchema>
 
-type Tab = 'applications' | 'contacts' | 'settings'
-
 // ── Shared field component ─────────────────────────────────────────────────────
 
 function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
@@ -444,7 +442,68 @@ function SettingsTab({ adminKey }: { adminKey: string }) {
   )
 }
 
+// ── Import Tab ────────────────────────────────────────────────────────────────
+
+function ImportTab({ adminKey }: { adminKey: string }) {
+  const { t } = useLanguage()
+  const [jsonText, setJsonText] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [result, setResult] = useState<{ imported: number; skipped: number } | null>(null)
+
+  const handleImport = async () => {
+    setLoading(true)
+    setResult(null)
+    try {
+      const parsed = JSON.parse(jsonText)
+      // Accept either the full catalog object { cvs: [...] } or a bare array
+      const payload = Array.isArray(parsed) ? { cvs: parsed } : parsed
+      const res = await hiringApi.bulkImport(payload, adminKey)
+      setResult(res)
+      toast.success(`${t.cvCatalog.importSuccess}: ${res.imported} imported, ${res.skipped} skipped`)
+      setJsonText('')
+    } catch (err) {
+      toast.error(t.cvCatalog.importFail)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="max-w-2xl space-y-6">
+      <div className="glass-card p-6 border border-lime/10 space-y-4">
+        <div>
+          <h4 className="font-bold text-white">{t.cvCatalog.importTitle}</h4>
+          <p className="text-white/40 text-sm mt-1">{t.cvCatalog.importDesc}</p>
+        </div>
+        <textarea
+          value={jsonText}
+          onChange={e => setJsonText(e.target.value)}
+          rows={12}
+          placeholder={'{\n  "cvs": [...]\n}'}
+          className="w-full bg-white/5 border border-white/10 focus:border-lime/50 rounded-xl px-4 py-3 text-white/80 outline-none transition-colors placeholder-white/20 text-xs font-mono resize-y"
+        />
+        <div className="flex items-center gap-4">
+          <button
+            onClick={handleImport}
+            disabled={loading || !jsonText.trim()}
+            className="bg-lime text-black font-bold px-5 py-2 rounded-xl hover:bg-lime/80 transition-colors text-sm disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            {loading ? '...' : t.cvCatalog.importButton}
+          </button>
+          {result && (
+            <p className="text-white/50 text-sm">
+              ✓ {result.imported} imported &nbsp;·&nbsp; {result.skipped} skipped
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // ── Main AdminDashboard ───────────────────────────────────────────────────────
+
+type Tab = 'applications' | 'contacts' | 'settings' | 'import'
 
 export function AdminDashboard({ adminKey, onLogout }: { adminKey: string; onLogout: () => void }) {
   const { t } = useLanguage()
@@ -454,6 +513,7 @@ export function AdminDashboard({ adminKey, onLogout }: { adminKey: string; onLog
     { key: 'applications', label: t.adminDashboard.tabApplications },
     { key: 'contacts', label: t.adminDashboard.tabContacts },
     { key: 'settings', label: t.adminDashboard.tabSettings },
+    { key: 'import', label: t.cvCatalog.importTab },
   ]
 
   return (
@@ -515,6 +575,7 @@ export function AdminDashboard({ adminKey, onLogout }: { adminKey: string; onLog
             {activeTab === 'applications' && <ApplicationsTab adminKey={adminKey} />}
             {activeTab === 'contacts' && <ContactsTab adminKey={adminKey} />}
             {activeTab === 'settings' && <SettingsTab adminKey={adminKey} />}
+            {activeTab === 'import' && <ImportTab adminKey={adminKey} />}
           </motion.div>
         </AnimatePresence>
       </div>

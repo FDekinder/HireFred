@@ -11,6 +11,16 @@ const STATUS_COLORS: Record<string, string> = {
   closed: 'text-white/40 border-white/20 bg-white/5',
 }
 
+function toInitials(name: string): string {
+  return name
+    .split(' ')
+    .map(part => part[0]?.toUpperCase() ?? '')
+    .join('.')
+    + '.'
+}
+
+const ALPHA = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
 export function ContactsTable({ contacts }: { contacts: RecruiterContact[] }) {
   const { t } = useLanguage()
 
@@ -48,8 +58,8 @@ export function ContactsTable({ contacts }: { contacts: RecruiterContact[] }) {
                   transition={{ delay: i * 0.05 }}
                   className="border-b border-white/5 hover:bg-white/5 transition-colors"
                 >
-                  <td className="py-3 px-4 text-white font-medium">{c.name}</td>
-                  <td className="py-3 px-4 text-white/70">{c.company}</td>
+                  <td className="py-3 px-4 text-white font-medium">{toInitials(c.name)}</td>
+                  <td className="py-3 px-4 text-white/70">Company {ALPHA[i % ALPHA.length]}</td>
                   <td className="py-3 px-4 text-white/70">{c.role}</td>
                   <td className="py-3 px-4 text-white/50">{c.last_contact_date}</td>
                   <td className="py-3 px-4">
@@ -57,7 +67,7 @@ export function ContactsTable({ contacts }: { contacts: RecruiterContact[] }) {
                       {c.status}
                     </span>
                   </td>
-                  <td className="py-3 px-4 text-white/50 max-w-xs truncate">{c.note ?? '—'}</td>
+                  <td className="py-3 px-4 text-white/30 max-w-xs truncate">—</td>
                 </motion.tr>
               )
             })}

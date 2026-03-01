@@ -237,6 +237,32 @@ export interface Translations {
     contactHeading2: string
     contactSubtitle: string
   }
+  cvCatalog: {
+    title: string
+    subtitle: string
+    statByStatus: string
+    statByLanguage: string
+    statByRoleType: string
+    filterAll: string
+    filterStatus: string
+    filterLanguage: string
+    filterRoleType: string
+    colCompany: string
+    colRole: string
+    colRoleType: string
+    colLanguage: string
+    colLocation: string
+    colDate: string
+    colStatus: string
+    colNotes: string
+    empty: string
+    importTab: string
+    importTitle: string
+    importDesc: string
+    importButton: string
+    importSuccess: string
+    importFail: string
+  }
   adminDashboard: {
     title: string
     subtitle: string

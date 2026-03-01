@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { hiringApi, DashboardStats, RecruiterContact, HiringStatusBanner } from '@/lib/api'
+import { hiringApi, DashboardStats, RecruiterContact, HiringStatusBanner, Application } from '@/lib/api'
 import { StatusBannerWidget } from '@/components/hiring/StatusBannerWidget'
 import { useLanguage } from '@/lib/i18n/context'
 import { KpiCards } from '@/components/hiring/KpiCards'
@@ -12,23 +12,30 @@ import { StatusDonutChart } from '@/components/hiring/StatusDonutChart'
 import { CumulativeLineChart } from '@/components/hiring/CumulativeLineChart'
 import { JobTypeBarChart } from '@/components/hiring/JobTypeBarChart'
 import { ContactsTable } from '@/components/hiring/ContactsTable'
+import { CvCatalog } from '@/components/hiring/CvCatalog'
 
 export default function HiringProgressPage() {
   const { t } = useLanguage()
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [contacts, setContacts] = useState<RecruiterContact[]>([])
   const [banner, setBanner] = useState<HiringStatusBanner | null>(null)
+  const [applications, setApplications] = useState<Application[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    // Public dashboard fetches — no admin key needed for reading applications via dashboard endpoint
     Promise.all([
       hiringApi.getDashboard(),
       hiringApi.getContacts(),
       hiringApi.getBanner(),
-    ]).then(([statsData, contactsData, bannerData]) => {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/hiring/applications/public`)
+        .then(r => r.ok ? r.json() : [])
+        .catch(() => []),
+    ]).then(([statsData, contactsData, bannerData, appsData]) => {
       setStats(statsData)
       setContacts(contactsData)
       setBanner(bannerData)
+      setApplications(Array.isArray(appsData) ? appsData : [])
       setLoading(false)
     })
   }, [])
@@ -105,12 +112,23 @@ export default function HiringProgressPage() {
           </motion.div>
         )}
 
+        {/* CV Catalog */}
+        {!loading && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.3 }}
+          >
+            <CvCatalog applications={applications} />
+          </motion.div>
+        )}
+
         {/* Contacts Table */}
         {!loading && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.35 }}
+            transition={{ duration: 0.4, delay: 0.4 }}
           >
             <ContactsTable contacts={contacts} />
           </motion.div>

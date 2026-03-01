@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Header
 from sqlmodel import Session, select
-from typing import List, Optional
+from typing import List, Optional, Any, Dict
 from collections import defaultdict, Counter
 from datetime import date, timedelta
 
@@ -99,6 +99,12 @@ def get_dashboard(session: Session = Depends(get_session)):
 
 # ── Protected endpoints ────────────────────────────────────────────────────────
 
+@router.get("/applications/public", response_model=List[ApplicationRead])
+def list_applications_public(session: Session = Depends(get_session)):
+    """Public read-only list of all applications (used by the CV Catalog on the dashboard)."""
+    return session.exec(select(Application).order_by(Application.date_sent.desc())).all()
+
+
 @router.get("/applications", response_model=List[ApplicationRead])
 def list_applications(
     session: Session = Depends(get_session),
@@ -180,6 +186,99 @@ def update_contact(
     session.commit()
     session.refresh(contact)
     return contact
+
+
+@router.post("/applications/bulk-import", status_code=200)
+def bulk_import_applications(
+    payload: Dict[str, Any],
+    session: Session = Depends(get_session),
+    _: None = Depends(verify_admin_key),
+):
+    """
+    Import a cv_catalog.json payload. Accepts { cvs: [...] }.
+    Each CV entry is mapped to an Application row.
+    Skips entries that already exist (matched by company + role + date_sent).
+    Returns { imported, skipped }.
+    """
+    cvs = payload.get("cvs", [])
+    if not isinstance(cvs, list):
+        raise HTTPException(status_code=422, detail="'cvs' must be a list")
+
+    STATUS_MAP = {
+        "applied": "applied",
+        "response": "response",
+        "interview": "interview",
+        "offer": "offer",
+        "rejected": "rejected",
+        "no_response": "no_response",
+    }
+    JOB_TYPE_MAP = {
+        "CSM": "fulltime",
+        "CPM": "fulltime",
+        "Director": "fulltime",
+        "Account Manager": "fulltime",
+        "CSM - Scaled": "fulltime",
+    }
+
+    imported = 0
+    skipped = 0
+
+    for cv in cvs:
+        company = cv.get("company", "").strip()
+        role = cv.get("role", "").strip()
+        date_sent = cv.get("created_date", "").strip()
+        raw_status = cv.get("status", "applied")
+        role_type = cv.get("role_type", "")
+        language = cv.get("language", "")
+        location_type = cv.get("location_type", "")
+        notes_raw = cv.get("notes", "")
+        industry = cv.get("industry", "")
+
+        if not company or not role or not date_sent:
+            skipped += 1
+            continue
+
+        # Check for duplicate: same company + role + date_sent
+        existing = session.exec(
+            select(Application).where(
+                Application.company == company,
+                Application.role == role,
+                Application.date_sent == date_sent,
+            )
+        ).first()
+
+        if existing:
+            skipped += 1
+            continue
+
+        status = STATUS_MAP.get(raw_status, "applied")
+        job_type = JOB_TYPE_MAP.get(role_type, "fulltime")
+
+        # Compose notes with extra metadata
+        note_parts = []
+        if notes_raw:
+            note_parts.append(notes_raw)
+        if language:
+            note_parts.append(f"Lang: {language}")
+        if location_type:
+            note_parts.append(f"Location: {location_type}")
+        if industry:
+            note_parts.append(f"Industry: {industry}")
+        notes = " | ".join(note_parts) if note_parts else None
+
+        app = Application(
+            company=company,
+            role=role,
+            job_type=job_type,
+            date_sent=date_sent,
+            status=status,
+            notes=notes,
+        )
+        session.add(app)
+        imported += 1
+
+    session.commit()
+    return {"imported": imported, "skipped": skipped}
 
 
 @router.delete("/contacts/{contact_id}", status_code=204)

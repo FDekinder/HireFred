@@ -451,4 +451,14 @@ export const hiringApi = {
     if (!res.ok) throw new Error('Failed to update banner')
     return res.json()
   },
+
+  async bulkImport(payload: { cvs: unknown[] }, adminKey: string): Promise<{ imported: number; skipped: number }> {
+    const res = await fetch(`${API_URL}/api/hiring/applications/bulk-import`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Key': adminKey },
+      body: JSON.stringify(payload),
+    })
+    if (!res.ok) throw new Error('Failed to import')
+    return res.json()
+  },
 }
