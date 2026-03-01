@@ -25,6 +25,8 @@ app.add_middleware(
         "https://hire-fred.vercel.app",
         "https://hire-fred-git-main-fdekinders-projects.vercel.app",
         "https://hire-fred-fdekinders-projects.vercel.app",
+        "https://you-should-hire-me.com",
+        "https://www.you-should-hire-me.com",
     ],
     allow_credentials=True,
     allow_methods=["*"],

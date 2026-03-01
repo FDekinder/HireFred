@@ -13,9 +13,12 @@ import { CumulativeLineChart } from '@/components/hiring/CumulativeLineChart'
 import { JobTypeBarChart } from '@/components/hiring/JobTypeBarChart'
 import { ContactsTable } from '@/components/hiring/ContactsTable'
 import { CvCatalog } from '@/components/hiring/CvCatalog'
+import { PasswordGate } from '@/components/landing/PasswordGate'
+import { useCompany } from '@/lib/company'
 
 export default function HiringProgressPage() {
   const { t } = useLanguage()
+  const [company, setCompany] = useCompany()
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [contacts, setContacts] = useState<RecruiterContact[]>([])
   const [banner, setBanner] = useState<HiringStatusBanner | null>(null)
@@ -23,6 +26,7 @@ export default function HiringProgressPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    if (!company) return
     // Public dashboard fetches — no admin key needed for reading applications via dashboard endpoint
     Promise.all([
       hiringApi.getDashboard(),
@@ -38,7 +42,11 @@ export default function HiringProgressPage() {
       setApplications(Array.isArray(appsData) ? appsData : [])
       setLoading(false)
     })
-  }, [])
+  }, [company])
+
+  if (!company) {
+    return <PasswordGate onUnlock={setCompany} />
+  }
 
   return (
     <main className="min-h-screen bg-black text-white">
