@@ -216,13 +216,11 @@ export function CvCatalog({ applications }: { applications: Application[] }) {
           <thead>
             <tr className="border-b border-white/10">
               {[
-                t.cvCatalog.colCompany,
                 t.cvCatalog.colRole,
                 t.cvCatalog.colDate,
                 t.cvCatalog.colLanguage,
                 t.cvCatalog.colLocation,
                 t.cvCatalog.colStatus,
-                t.cvCatalog.colNotes,
               ].map(col => (
                 <th key={col} className="text-left py-3 px-3 text-white/40 font-medium text-xs uppercase tracking-wider">
                   {col}
@@ -242,7 +240,6 @@ export function CvCatalog({ applications }: { applications: Application[] }) {
                   transition={{ delay: Math.min(i * 0.03, 0.3) }}
                   className="border-b border-white/5 hover:bg-white/5 transition-colors"
                 >
-                  <td className="py-2.5 px-3 text-white font-medium">{app.company}</td>
                   <td className="py-2.5 px-3 text-white/70 max-w-[160px] truncate">{app.role}</td>
                   <td className="py-2.5 px-3 text-white/50 whitespace-nowrap">{app.date_sent}</td>
                   <td className="py-2.5 px-3">
@@ -258,7 +255,6 @@ export function CvCatalog({ applications }: { applications: Application[] }) {
                       {app.status.replace('_', ' ')}
                     </span>
                   </td>
-                  <td className="py-2.5 px-3 text-white/30 max-w-[200px] truncate text-xs">{notesText ?? '—'}</td>
                 </motion.tr>
               )
             })}
